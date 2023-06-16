@@ -4,16 +4,9 @@
 
 Este repositório armazena o protótipo de um algoritmo genético para fomentar o aprimoramento do scheduler padrão do Kubernetes. O objetivo do projeto é melhorar a orquestração das funções do núcleo levando em consideração a comunicação entre os PODs do cluster.
 
-> **Note**: O projeto está em fase de modelagem. O modelo está sendo formulado utilizando MATLAB
+> **Note**: O projeto em fase de andamento porém funcional para testes iniciais
 
 ## Como utilizar:
-
-Clone este repositório e:
-
-```bash
-cd k8sgascheduler
-python algoritmoGenetico.py
-```
 
 Ao executar o Algoritmo irá solicitar as sequintes informações:
 
@@ -26,9 +19,16 @@ Para os PODs:
 - A quantidade de PODs a serem alocados
 - A Porcentagem de relacionamentos
 
-> **Note**: A porcentagem de relacionamentos diz respeito a probabilidade de um POD se relacionar (trocar informações) com outro POD. O algoritmo irá gerar aleatoriamente um peso para os PODs que se comuniquem para simular o trafego de informações. Cada POD também terá requisitos de CPU e Memória e esses requisitos serão gerados aleatoriamente entre 100 e 200 tanto para memória quanto para CPU.
+Clone este repositório e:
 
-O algoritmo irá computar a quantidade de recursos no Cluster e a quantidade de recursos solicitados pelos PODs. Caso os recursos sejam insuficientes a alocação não será feita. Do contrário o algoritmo segue se fluxo.
+```bash
+cd k8sgascheduler
+python algoritmoGenetico.py
+```
+
+> **Note**: A porcentagem de relacionamentos diz respeito a probabilidade de um POD se relacionar (trocar informações) com outro POD. O algoritmo irá gerar aleatoriamente um peso para os PODs que se comunicam para simular o trafego de informações. Cada POD também terá requisitos de CPU e Memória e esses requisitos serão gerados aleatoriamente entre 100 e 200 tanto para memória quanto para CPU.
+
+O algoritmo irá computar a quantidade de recursos no Cluster e a quantidade de recursos solicitados pelos PODs. Caso os recursos sejam insuficientes a alocação não será feita. Do contrário o algoritmo segue seu fluxo.
 
 ## Resultado do algoritmo
 
