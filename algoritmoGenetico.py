@@ -12,7 +12,6 @@ Fluxo do algoritmo genético:
         - Cada cromossomo é uma "pessoa" que carrega uma possível solução.
     3 - Avaliação da aptidão (fitness)
         - A aptidão calcula o quão boa é aquela alocação com base no peso do relacionamento entre os PODs
-        - Quanto menor o valor melhor a aptidão para solução
     4 - Seleção dos pais
         - Seleciona os cromossomos pais (roleta)
     5 - Cruzamento (crossover)
@@ -33,17 +32,17 @@ import matplotlib.pyplot as plt
 tam_populacao = 100
 num_geracoes = 100
 prob_cruzamento = 0.9
-prob_mutacao = 0.1
+prob_mutacao = 0.2
 
-def gerar_matriz_nos (numero_nos):
+def gerar_matriz_nos(numero_nos):
     matriz_nos=[]
-    cpuNo = int(input("Informe a quantidade de cpu dos nós: "))
-    memNo = int(input("Informe a quantidade de memória dos nós: "))
+    cpu_no = int(input("Informe a quantidade de cpu dos nós: "))
+    mem_no = int(input("Informe a quantidade de memória dos nós: "))
     for i in range(numero_nos):
         no = {}
         no['id'] = i
-        no['cpu_no'] = cpuNo
-        no['memoria_no'] = memNo
+        no['cpu_no'] = cpu_no
+        no['memoria_no'] = mem_no
         matriz_nos.append(no)
     return matriz_nos
         
@@ -51,8 +50,8 @@ def gerar_matriz_pods(numero_pods, porcentagem_relacionamentos):
     matriz_pods = []
     matriz_relacionamentos = []
 
-    for _ in range(numero_pods):
-        pod = {'memoria': random.randint(100, 200), 'cpu': random.randint(100, 200)}
+    for i in range(numero_pods):
+        pod = {'id': i, 'memoria': random.randint(100, 200), 'cpu': random.randint(100, 200)}
         matriz_pods.append(pod)
 
     for i in range(numero_pods):
@@ -79,26 +78,45 @@ def iniciar_pop(numero_pods, numero_nos, tam_populacao):
         populacao.append(alocacao)
     return populacao
 
-# Calculando a Aptidão (fitness)
-def calcular_aptidao(alocacao, matriz_relacionamentos):
+# Versao 04 considerando memória e cpu
+def calcular_aptidao(alocacao, matriz_nos, matriz_pods, matriz_relacionamentos):
     aptidao = 0
+
     for i in range(len(alocacao)):
-        for j in range(i+1, len(alocacao)):
+        for j in range(i + 1, len(alocacao)):
             pod1 = alocacao[i]
             pod2 = alocacao[j]
             aptidao += matriz_relacionamentos[pod1][pod2]
+               
+        for k, no in enumerate(matriz_nos):
+            
+            #print(f"Nó {no['id']}: Memória={no['memoria_no']} CPU={no['cpu_no']}")
+            
+            cpu_usada = sum(matriz_pods[pod]['cpu'] for pod, node in enumerate(alocacao) if node == k)
+            memoria_usada = sum(matriz_pods[pod]['memoria'] for pod, node in enumerate(alocacao) if node == k)
+            
+            #print(f"Foi usado cpu: {cpu_usada}")
+            
+            if cpu_usada > no['cpu_no']:
+                aptidao -= cpu_usada - no['cpu_no']
+            
+            if memoria_usada > no['cpu_no']:
+                aptidao -= memoria_usada - no['memoria_no']
+
+    #print(f"Aptidão Final: {aptidao}")
+    #print('-' * 45)
     return aptidao
 
 # Seleciona os pais para realizar o cruzamento e gerar novos filhos (método roleta)
 def selecionar_pais(populacao, matriz_relacionamentos):
     pais_selecionados=[]
-    soma_aptidao = sum(calcular_aptidao(alocacao, matriz_relacionamentos) for alocacao in populacao)
+    soma_aptidao = sum(calcular_aptidao(alocacao, matriz_nos, matriz_pods, matriz_relacionamentos) for alocacao in populacao)
     for _ in range (len(populacao)):
         pai = None
         valor_aleatorio = random.uniform(0, soma_aptidao)
         acumulado = 0
         for alocacao in populacao:
-            acumulado += calcular_aptidao(alocacao, matriz_relacionamentos)
+            acumulado += calcular_aptidao(alocacao, matriz_nos, matriz_pods, matriz_relacionamentos)
             if acumulado >= valor_aleatorio:
                 pai = alocacao
                 break
@@ -106,16 +124,28 @@ def selecionar_pais(populacao, matriz_relacionamentos):
     return pais_selecionados
         
 # Realiza o cruzamento dos pais selecionados para que gere filhos com o gene de ambos
-def realizar_cruzamento(pais_selecionados):
+def realizar_cruzamento(pais_selecionados, prob_cruzamento):
     filhos = []
-    for i in range(0, len(pais_selecionados),2):
+    for i in range(0, len(pais_selecionados), 2):
         pai1 = pais_selecionados[i]
-        pai2 = pais_selecionados[i+1]
-        ponto_corte = random.randint(1, len(pai1)-1)
-        filho1 = pai1[:ponto_corte] + pai2[ponto_corte:]
-        filho2 = pai2[:ponto_corte] + pai1[ponto_corte:]
-        filhos.extend([filho1, filho2])
+        pai2 = pais_selecionados[i + 1]
+
+        if pai1 is None:
+            pai1 = random.choices(range(numero_nos), k=numero_pods)
+        if pai2 is None:
+            pai2 = random.choices(range(numero_nos), k=numero_pods)
+
+        if random.random() < prob_cruzamento:
+            ponto_corte = random.randint(1, len(pai1) - 1)
+            filho1 = pai1[:ponto_corte] + pai2[ponto_corte:]
+            filho2 = pai2[:ponto_corte] + pai1[ponto_corte:]
+            filhos.append(filho1)
+            filhos.append(filho2)
+        else:
+            filhos.append(pai1)
+            filhos.append(pai2)
     return filhos
+
 
 # Realiza a mutação para que novos filhos sejam gerados
 def realizar_mutacao(filhos, prob_mutacao):
@@ -123,22 +153,6 @@ def realizar_mutacao(filhos, prob_mutacao):
         if random.random() < prob_mutacao:
             indice1, indice2 = random.sample(range(len(filhos[i])), 2)
             filhos[i][indice1], filhos[i][indice2] = filhos[i][indice2], filhos[i][indice1]
-"""
-# Função geral que inicia o Algoritmo Genético
-def algoritmo_genetico(numero_pods, numero_nos, matriz_relacionamentos, tam_populacao, prob_mutacao, num_geracoes):
-    populacao = iniciar_pop(numero_pods, numero_nos, tam_populacao)
-    
-    for _ in range(num_geracoes):
-        pais_selecionados = selecionar_pais(populacao, matriz_relacionamentos)
-        filhos = realizar_cruzamento(pais_selecionados)
-        realizar_mutacao(filhos, prob_mutacao)
-        populacao = filhos
-    
-    melhor_alocacao = max(populacao, key=lambda alocacao: calcular_aptidao(alocacao, matriz_relacionamentos))
-    melhor_aptidao = calcular_aptidao(melhor_alocacao, matriz_relacionamentos)
-    
-    return melhor_alocacao, melhor_aptidao, populacao
-"""
 
 def algoritmo_genetico(numero_pods, numero_nos, matriz_relacionamentos, tam_populacao, prob_mutacao, num_geracoes):
     populacao = iniciar_pop(numero_pods, numero_nos, tam_populacao)
@@ -147,19 +161,19 @@ def algoritmo_genetico(numero_pods, numero_nos, matriz_relacionamentos, tam_popu
     
     for geracao in range(num_geracoes):
         pais_selecionados = selecionar_pais(populacao, matriz_relacionamentos)
-        filhos = realizar_cruzamento(pais_selecionados)
+        filhos = realizar_cruzamento(pais_selecionados, prob_cruzamento)
         realizar_mutacao(filhos, prob_mutacao)
         populacao = filhos
 
-        melhor_alocacao = max(populacao, key=lambda alocacao: calcular_aptidao(alocacao, matriz_relacionamentos))
-        melhor_aptidao = calcular_aptidao(melhor_alocacao, matriz_relacionamentos)
+        melhor_alocacao = max(populacao, key=lambda alocacao: calcular_aptidao(alocacao, matriz_nos, matriz_pods, matriz_relacionamentos))
+        melhor_aptidao = calcular_aptidao(melhor_alocacao, matriz_nos, matriz_pods, matriz_relacionamentos)
         
         melhores_aptidoes.append(melhor_aptidao)
         
         print(f"Melhor indivíduo da geração {geracao + 1}: {melhor_alocacao}, Aptidão: {melhor_aptidao}")
 
-    melhor_alocacao = max(populacao, key=lambda alocacao: calcular_aptidao(alocacao, matriz_relacionamentos))
-    melhor_aptidao = calcular_aptidao(melhor_alocacao, matriz_relacionamentos)
+    melhor_alocacao = max(populacao, key=lambda alocacao: calcular_aptidao(alocacao, matriz_nos, matriz_pods, matriz_relacionamentos))
+    melhor_aptidao = calcular_aptidao(melhor_alocacao, matriz_nos, matriz_pods, matriz_relacionamentos)
 
     # Plotando o gráfico
     plt.plot(range(1, num_geracoes + 1), melhores_aptidoes)
@@ -174,14 +188,6 @@ def algoritmo_genetico(numero_pods, numero_nos, matriz_relacionamentos, tam_popu
 
     return melhor_alocacao, melhor_aptidao
 
-
-
-# populacao = iniciar_pop(numero_pods, numero_nos, tam_populacao)
-# melhor_aptidao = calcular_aptidao(melhor_alocacao, matriz_relacionamentos)
-
-
-
-
 # Exemplo de uso do algoritmo
 print('-' * 45)
 print(' Alocação de recursos em um Cluster K8s')
@@ -192,6 +198,7 @@ matriz_nos = gerar_matriz_nos(numero_nos)
 
 print('-' * 45)
 print("# Gerando os Pods da Infraestrutura #")
+
 # Gerando os Pods
 numero_pods = int(input("Digite a quantidade de Pods a serem alocados: "))
 porcentagem_relacionamentos = float(input("Digite a porcentagem de relacionamentos (0-100): ")) / 100
@@ -226,7 +233,8 @@ print("")
 # Exibindo a matriz de pods
 print("Matriz de Pods:")
 for pod in matriz_pods:
-    print(pod)
+    print(f"Pod {pod['id']}: Memória={pod['memoria']} CPU={pod['cpu']}")
+    
 print(f"Quantidade total de CPU requerida pelos PODs: {cpu_total_pod}")
 print(f"Quantidade total de Memória requerida pelos PODs: {mem_total_pod}")
 print("")
@@ -239,30 +247,10 @@ print("")
 
 # Verificar se a infraestrutura comporta a quantidade de PODs
 
-if (cpu_total_no>cpu_total_pod) and (mem_total_no>mem_total_pod):
+if (cpu_total_no>=cpu_total_pod) and (mem_total_no>=mem_total_pod):
     print('-' * 45)
     print("O algoritmo pode otimizar a alocação...")
     melhor_alocacao, melhor_aptidao = algoritmo_genetico(numero_pods, numero_nos, matriz_relacionamentos, tam_populacao, prob_mutacao, num_geracoes)
 else:
     print('-' * 45)
     print("A alocação apropriada é infactível")
-
-
-
-
-"""
-
-plt.plot(alocacao, melhor_alocacao)
-plt.title('Evolução do fitness')
-plt.xlabel('Gerações')
-plt.ylabel('Fitness')
-plt.show()
-
-"""
-
-
-
-
-
-
-
