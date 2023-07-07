@@ -34,39 +34,44 @@ num_geracoes = 100
 prob_cruzamento = 0.9
 prob_mutacao = 0.2
 
-def gerar_matriz_nos(numero_nos):
-    matriz_nos=[]
-    cpu_no = int(input("Informe a quantidade de cpu dos nós: "))
-    mem_no = int(input("Informe a quantidade de memória dos nós: "))
-    for i in range(numero_nos):
-        no = {}
-        no['id'] = i
-        no['cpu_no'] = cpu_no
-        no['memoria_no'] = mem_no
-        matriz_nos.append(no)
+numero_nos = 3
+numero_pods = 10
+
+def gerar_matriz_nos():
+    matriz_nos=[
+        {"id": 0, "cpu_no": 1000, "memoria_no": 1024},
+        {"id": 1, "cpu_no": 1000, "memoria_no": 1024},
+        {"id": 2, "cpu_no": 1000, "memoria_no": 1024}
+    ]
     return matriz_nos
         
-def gerar_matriz_pods(numero_pods, porcentagem_relacionamentos):
-    matriz_pods = []
-    matriz_relacionamentos = []
+def gerar_matriz_pods():
+    matriz_pods = [
+        {"id": 0, "cpu": 192, "memoria": 137},
+        {"id": 0, "cpu": 174, "memoria": 177},
+        {"id": 0, "cpu": 138, "memoria": 133},
+        {"id": 0, "cpu": 139, "memoria": 106},
+        {"id": 0, "cpu": 105, "memoria": 166},
+        {"id": 0, "cpu": 155, "memoria": 102},
+        {"id": 0, "cpu": 198, "memoria": 111},
+        {"id": 0, "cpu": 143, "memoria": 181},
+        {"id": 0, "cpu": 191, "memoria": 168},
+        {"id": 0, "cpu": 132, "memoria": 116}
+    ]
+    
+    matriz_relacionamentos = [
+        [0, 3, 0, 0, 5, 0, 6, 10, 0, 6],
+        [0, 0, 0, 0, 10, 1, 0, 0, 0, 0],
+        [8, 9, 0, 0, 0, 9, 0, 1, 2, 1],
+        [10, 5, 10, 0, 4, 3, 8, 0, 8, 3],
+        [0, 0, 7, 6, 0, 0, 5, 1, 0, 0],
+        [0, 0, 0, 10, 10, 0, 1, 0, 0, 10],
+        [0, 0, 10, 0, 0, 0, 0, 5, 0, 0],
+        [0, 2, 0, 0, 0, 2, 4, 0, 2, 0],
+        [0, 5, 4, 6, 4, 6, 0, 8, 0, 0],
+        [4, 0, 5, 0, 0, 0, 10, 5, 9, 0]
+    ]
 
-    for i in range(numero_pods):
-        pod = {'id': i, 'memoria': random.randint(100, 200), 'cpu': random.randint(100, 200)}
-        matriz_pods.append(pod)
-
-    for i in range(numero_pods):
-        linha_relacionamentos = []
-        for j in range(numero_pods):
-            if i == j:
-                linha_relacionamentos.append(0)  # Pod não se comunica com ele mesmo
-            else:
-                if random.random() < porcentagem_relacionamentos:
-                    peso_ligacao = random.randint(0, 10)
-                else:
-                    peso_ligacao = 0 
-                linha_relacionamentos.append(peso_ligacao)
-
-        matriz_relacionamentos.append(linha_relacionamentos)
 
     return matriz_pods, matriz_relacionamentos
 
@@ -193,18 +198,18 @@ print('-' * 45)
 print(' Alocação de recursos em um Cluster K8s')
 print('-' * 45)
 print("# Gerando os Nós da Infraestrutura #")
-numero_nos = int(input("Digite a quantidade de nós da Infraestrutura: "))
-matriz_nos = gerar_matriz_nos(numero_nos)
+#numero_nos = int(input("Digite a quantidade de nós da Infraestrutura: "))
+matriz_nos = gerar_matriz_nos()
 
 print('-' * 45)
 print("# Gerando os Pods da Infraestrutura #")
 
 # Gerando os Pods
-numero_pods = int(input("Digite a quantidade de Pods a serem alocados: "))
-porcentagem_relacionamentos = float(input("Digite a porcentagem de relacionamentos (0-100): ")) / 100
+#numero_pods = int(input("Digite a quantidade de Pods a serem alocados: "))
+#porcentagem_relacionamentos = float(input("Digite a porcentagem de relacionamentos (0-100): ")) / 100
 
 
-matriz_pods, matriz_relacionamentos = gerar_matriz_pods(numero_pods, porcentagem_relacionamentos)
+matriz_pods, matriz_relacionamentos = gerar_matriz_pods()
 print("")
 
 # Realiza o somatório da quantidade total de Memória e CPU dos Nós

@@ -1,0 +1,140 @@
+Matriz dos Nos:
+Nó 0: Memória=1024 CPU=1000
+Nó 1: Memória=1024 CPU=1000
+Nó 2: Memória=1024 CPU=1000
+Quantidade total de CPU dos Nós: 3000
+Quantidade total de Memória dos Nós: 3072
+
+Matriz de Pods:
+Pod 0: Memória=137 CPU=192
+Pod 0: Memória=177 CPU=174
+Pod 0: Memória=133 CPU=138
+Pod 0: Memória=106 CPU=139
+Pod 0: Memória=166 CPU=105
+Pod 0: Memória=102 CPU=155
+Pod 0: Memória=111 CPU=198
+Pod 0: Memória=181 CPU=143
+Pod 0: Memória=168 CPU=191
+Pod 0: Memória=116 CPU=132
+Quantidade total de CPU requerida pelos PODs: 1567
+Quantidade total de Memória requerida pelos PODs: 1397
+
+
+Matriz de Relacionamentos:
+[0, 3, 0, 0, 5, 0, 6, 10, 0, 6]
+[0, 0, 0, 0, 10, 1, 0, 0, 0, 0]
+[8, 9, 0, 0, 0, 9, 0, 1, 2, 1]
+[10, 5, 10, 0, 4, 3, 8, 0, 8, 3]
+[0, 0, 7, 6, 0, 0, 5, 1, 0, 0]
+[0, 0, 0, 10, 10, 0, 1, 0, 0, 10]
+[0, 0, 10, 0, 0, 0, 0, 5, 0, 0]
+[0, 2, 0, 0, 0, 2, 4, 0, 2, 0]
+[0, 5, 4, 6, 4, 6, 0, 8, 0, 0]
+[4, 0, 5, 0, 0, 0, 10, 5, 9, 0]
+
+---------------------------------------------
+O algoritmo pode otimizar a alocação...
+Melhor indivíduo da geração 1: [2, 0, 2, 2, 2, 1, 0, 0, 1, 1], Aptidão: 201
+Melhor indivíduo da geração 2: [2, 2, 2, 1, 1, 2, 0, 0, 1, 1], Aptidão: 202
+Melhor indivíduo da geração 3: [2, 2, 2, 1, 2, 1, 1, 0, 1, 1], Aptidão: 209
+Melhor indivíduo da geração 4: [2, 2, 2, 1, 2, 1, 1, 0, 1, 1], Aptidão: 209
+Melhor indivíduo da geração 5: [2, 2, 2, 0, 1, 1, 0, 1, 1, 1], Aptidão: 207
+Melhor indivíduo da geração 6: [2, 2, 2, 1, 2, 1, 1, 0, 1, 1], Aptidão: 209
+Melhor indivíduo da geração 7: [2, 2, 2, 2, 0, 1, 0, 0, 1, 1], Aptidão: 225
+Melhor indivíduo da geração 8: [2, 2, 2, 2, 0, 1, 0, 0, 1, 1], Aptidão: 225
+Melhor indivíduo da geração 9: [2, 2, 2, 2, 2, 1, 1, 0, 1, 1], Aptidão: 226
+Melhor indivíduo da geração 10: [2, 2, 2, 2, 0, 1, 0, 0, 1, 1], Aptidão: 225
+Melhor indivíduo da geração 11: [2, 2, 2, 2, 1, 0, 0, 1, 1, 1], Aptidão: 226
+Melhor indivíduo da geração 12: [2, 2, 2, 2, 0, 1, 0, 1, 1, 1], Aptidão: 229
+Melhor indivíduo da geração 13: [2, 2, 2, 2, 1, 0, 0, 0, 1, 1], Aptidão: 222
+Melhor indivíduo da geração 14: [2, 2, 2, 2, 2, 1, 1, 0, 0, 1], Aptidão: 221
+Melhor indivíduo da geração 15: [2, 2, 2, 2, 1, 1, 0, 0, 1, 1], Aptidão: 220
+Melhor indivíduo da geração 16: [2, 2, 2, 2, 1, 1, 0, 0, 1, 1], Aptidão: 220
+Melhor indivíduo da geração 17: [2, 2, 2, 2, 1, 2, 0, 1, 1, 1], Aptidão: 220
+Melhor indivíduo da geração 18: [2, 2, 2, 2, 0, 2, 0, 1, 1, 1], Aptidão: 225
+Melhor indivíduo da geração 19: [2, 2, 2, 2, 2, 2, 0, 1, 1, 1], Aptidão: 219
+Melhor indivíduo da geração 20: [2, 2, 2, 2, 2, 2, 0, 1, 1, 1], Aptidão: 219
+Melhor indivíduo da geração 21: [2, 2, 2, 1, 2, 0, 0, 1, 1, 1], Aptidão: 217
+Melhor indivíduo da geração 22: [2, 2, 2, 2, 2, 1, 0, 1, 0, 1], Aptidão: 224
+Melhor indivíduo da geração 23: [2, 2, 2, 2, 2, 1, 0, 1, 0, 1], Aptidão: 224
+Melhor indivíduo da geração 24: [2, 2, 2, 2, 2, 1, 0, 1, 1, 1], Aptidão: 229
+Melhor indivíduo da geração 25: [2, 2, 2, 2, 2, 1, 0, 1, 0, 1], Aptidão: 224
+Melhor indivíduo da geração 26: [2, 2, 2, 2, 2, 1, 0, 1, 0, 1], Aptidão: 224
+Melhor indivíduo da geração 27: [2, 2, 2, 2, 0, 1, 0, 1, 1, 1], Aptidão: 229
+Melhor indivíduo da geração 28: [2, 2, 2, 2, 2, 1, 0, 1, 1, 1], Aptidão: 229
+Melhor indivíduo da geração 29: [2, 2, 2, 2, 2, 1, 0, 1, 1, 1], Aptidão: 229
+Melhor indivíduo da geração 30: [2, 2, 2, 2, 2, 1, 0, 1, 1, 1], Aptidão: 229
+Melhor indivíduo da geração 31: [2, 2, 2, 2, 2, 1, 0, 1, 1, 1], Aptidão: 229
+Melhor indivíduo da geração 32: [2, 2, 2, 2, 2, 0, 0, 1, 1, 1], Aptidão: 233
+Melhor indivíduo da geração 33: [2, 2, 2, 2, 2, 0, 0, 1, 1, 1], Aptidão: 233
+Melhor indivíduo da geração 34: [2, 2, 2, 2, 2, 0, 0, 1, 1, 1], Aptidão: 233
+Melhor indivíduo da geração 35: [2, 2, 2, 2, 2, 0, 0, 1, 1, 1], Aptidão: 233
+Melhor indivíduo da geração 36: [2, 2, 2, 2, 0, 0, 0, 1, 1, 1], Aptidão: 231
+Melhor indivíduo da geração 37: [2, 2, 2, 2, 0, 0, 0, 1, 1, 1], Aptidão: 231
+Melhor indivíduo da geração 38: [2, 2, 2, 2, 0, 0, 0, 1, 1, 1], Aptidão: 231
+Melhor indivíduo da geração 39: [2, 2, 2, 2, 0, 1, 0, 1, 1, 1], Aptidão: 229
+Melhor indivíduo da geração 40: [2, 2, 2, 2, 2, 1, 0, 1, 1, 1], Aptidão: 229
+Melhor indivíduo da geração 41: [2, 2, 2, 2, 0, 0, 0, 1, 1, 1], Aptidão: 231
+Melhor indivíduo da geração 42: [2, 2, 2, 2, 2, 0, 0, 1, 1, 1], Aptidão: 233
+Melhor indivíduo da geração 43: [2, 2, 2, 2, 2, 1, 0, 1, 1, 1], Aptidão: 229
+Melhor indivíduo da geração 44: [2, 2, 2, 2, 0, 0, 0, 1, 1, 1], Aptidão: 231
+Melhor indivíduo da geração 45: [2, 2, 2, 2, 2, 0, 0, 1, 1, 1], Aptidão: 233
+Melhor indivíduo da geração 46: [2, 2, 2, 2, 0, 0, 0, 1, 1, 1], Aptidão: 231
+Melhor indivíduo da geração 47: [2, 2, 2, 2, 2, 1, 0, 1, 1, 1], Aptidão: 229
+Melhor indivíduo da geração 48: [2, 2, 2, 2, 2, 0, 0, 1, 1, 1], Aptidão: 233
+Melhor indivíduo da geração 49: [2, 2, 2, 2, 2, 1, 0, 1, 1, 1], Aptidão: 229
+Melhor indivíduo da geração 50: [2, 2, 2, 2, 2, 0, 1, 1, 1, 1], Aptidão: 232
+Melhor indivíduo da geração 51: [2, 2, 2, 2, 2, 0, 0, 1, 1, 1], Aptidão: 233
+Melhor indivíduo da geração 52: [2, 2, 2, 2, 2, 0, 0, 1, 1, 1], Aptidão: 233
+Melhor indivíduo da geração 53: [2, 2, 2, 2, 2, 0, 0, 1, 1, 1], Aptidão: 233
+Melhor indivíduo da geração 54: [2, 2, 2, 2, 2, 0, 0, 1, 1, 1], Aptidão: 233
+Melhor indivíduo da geração 55: [2, 2, 2, 2, 2, 0, 0, 1, 1, 1], Aptidão: 233
+Melhor indivíduo da geração 56: [2, 2, 2, 2, 2, 0, 0, 1, 1, 1], Aptidão: 233
+Melhor indivíduo da geração 57: [2, 2, 2, 2, 2, 0, 0, 1, 1, 1], Aptidão: 233
+Melhor indivíduo da geração 58: [2, 2, 2, 2, 2, 0, 0, 1, 1, 1], Aptidão: 233
+Melhor indivíduo da geração 59: [2, 2, 2, 2, 2, 0, 0, 1, 1, 1], Aptidão: 233
+Melhor indivíduo da geração 60: [2, 2, 2, 2, 2, 0, 0, 1, 1, 1], Aptidão: 233
+Melhor indivíduo da geração 61: [2, 2, 2, 2, 2, 0, 0, 1, 1, 1], Aptidão: 233
+Melhor indivíduo da geração 62: [2, 2, 2, 2, 2, 0, 0, 1, 1, 1], Aptidão: 233
+Melhor indivíduo da geração 63: [2, 2, 2, 2, 2, 0, 0, 1, 1, 1], Aptidão: 233
+Melhor indivíduo da geração 64: [2, 2, 2, 2, 0, 0, 1, 1, 1, 1], Aptidão: 232
+Melhor indivíduo da geração 65: [2, 2, 2, 2, 2, 0, 0, 1, 1, 1], Aptidão: 233
+Melhor indivíduo da geração 66: [2, 2, 2, 2, 2, 0, 0, 1, 1, 1], Aptidão: 233
+Melhor indivíduo da geração 67: [2, 2, 2, 2, 2, 0, 1, 1, 1, 1], Aptidão: 232
+Melhor indivíduo da geração 68: [2, 2, 2, 2, 2, 0, 1, 1, 1, 1], Aptidão: 232
+Melhor indivíduo da geração 69: [2, 2, 2, 2, 2, 0, 0, 1, 1, 1], Aptidão: 233
+Melhor indivíduo da geração 70: [2, 2, 2, 2, 2, 0, 0, 1, 1, 1], Aptidão: 233
+Melhor indivíduo da geração 71: [2, 2, 2, 2, 2, 0, 0, 1, 1, 1], Aptidão: 233
+Melhor indivíduo da geração 72: [2, 2, 2, 2, 2, 0, 0, 1, 1, 1], Aptidão: 233
+Melhor indivíduo da geração 73: [2, 2, 2, 2, 2, 0, 0, 1, 1, 1], Aptidão: 233
+Melhor indivíduo da geração 74: [2, 2, 2, 2, 2, 0, 0, 1, 1, 1], Aptidão: 233
+Melhor indivíduo da geração 75: [2, 2, 2, 2, 2, 0, 0, 1, 1, 1], Aptidão: 233
+Melhor indivíduo da geração 76: [2, 2, 2, 2, 2, 0, 0, 1, 1, 1], Aptidão: 233
+Melhor indivíduo da geração 77: [2, 2, 2, 2, 2, 0, 1, 1, 1, 1], Aptidão: 232
+Melhor indivíduo da geração 78: [2, 2, 2, 2, 2, 0, 1, 1, 1, 1], Aptidão: 232
+Melhor indivíduo da geração 79: [2, 2, 2, 2, 2, 0, 1, 1, 1, 1], Aptidão: 232
+Melhor indivíduo da geração 80: [2, 2, 2, 2, 2, 0, 1, 1, 1, 1], Aptidão: 232
+Melhor indivíduo da geração 81: [2, 2, 2, 2, 0, 0, 1, 1, 1, 1], Aptidão: 232
+Melhor indivíduo da geração 82: [2, 2, 2, 2, 0, 0, 1, 1, 1, 1], Aptidão: 232
+Melhor indivíduo da geração 83: [2, 2, 2, 2, 2, 0, 0, 1, 1, 1], Aptidão: 233
+Melhor indivíduo da geração 84: [2, 2, 2, 2, 2, 0, 1, 1, 1, 1], Aptidão: 232
+Melhor indivíduo da geração 85: [2, 2, 2, 2, 2, 0, 1, 1, 1, 1], Aptidão: 232
+Melhor indivíduo da geração 86: [2, 2, 2, 2, 2, 0, 1, 1, 1, 1], Aptidão: 232
+Melhor indivíduo da geração 87: [2, 2, 2, 2, 2, 0, 1, 1, 1, 1], Aptidão: 232
+Melhor indivíduo da geração 88: [2, 2, 2, 2, 2, 0, 1, 1, 1, 1], Aptidão: 232
+Melhor indivíduo da geração 89: [2, 2, 2, 2, 2, 0, 1, 1, 1, 1], Aptidão: 232
+Melhor indivíduo da geração 90: [2, 2, 2, 2, 2, 0, 0, 1, 1, 1], Aptidão: 233
+Melhor indivíduo da geração 91: [2, 2, 2, 2, 2, 0, 0, 1, 1, 1], Aptidão: 233
+Melhor indivíduo da geração 92: [2, 2, 2, 2, 2, 0, 0, 1, 1, 1], Aptidão: 233
+Melhor indivíduo da geração 93: [2, 2, 2, 2, 2, 0, 0, 1, 1, 1], Aptidão: 233
+Melhor indivíduo da geração 94: [2, 2, 2, 2, 2, 0, 0, 1, 1, 1], Aptidão: 233
+Melhor indivíduo da geração 95: [2, 2, 2, 2, 2, 0, 1, 1, 1, 1], Aptidão: 232
+Melhor indivíduo da geração 96: [2, 2, 2, 2, 2, 0, 1, 1, 1, 1], Aptidão: 232
+Melhor indivíduo da geração 97: [2, 2, 2, 2, 2, 0, 1, 1, 1, 1], Aptidão: 232
+Melhor indivíduo da geração 98: [2, 2, 2, 2, 2, 0, 1, 1, 1, 1], Aptidão: 232
+Melhor indivíduo da geração 99: [2, 2, 2, 2, 2, 0, 0, 1, 1, 1], Aptidão: 233
+Melhor indivíduo da geração 100: [2, 2, 2, 2, 2, 0, 1, 1, 1, 1], Aptidão: 232
+
+Melhor alocação encontrada:
+Alocação: [2, 2, 2, 2, 2, 0, 1, 1, 1, 1]
+Aptidão: 232
