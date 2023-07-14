@@ -44,23 +44,23 @@ Serão criadas três matrizes:
     ]
     ```
 - Matriz de Relacionamentos
-    - A matrid de relacionamentos é uma matriz simétrica
+    - A matriz de relacionamentos é uma matriz simétrica
     - Contem o peso do relacionamento entre os pods
     ```python
     matriz_relacionamentos = [
-        [0, 3, 0, 0, 5, 0, 6, 10, 0, 6],
-        [3, 0, 9, 5, 0, 0, 0, 2, 0, 0],
-        [0, 9, 0, 0, 7, 0, 10, 0, 0, 0],
-        [0, 5, 0, 0, 6, 10, 0, 0, 4, 5],
-        [5, 0, 7, 6, 0, 0, 5, 1, 0, 0],
-        [0, 0, 0, 10, 0, 0, 1, 0, 0, 10],
-        [6, 0, 10, 0, 5, 1, 0, 5, 0, 10],
-        [10, 2, 0, 0, 1, 0, 5, 0, 2, 5],
-        [0, 0, 0, 4, 0, 0, 0, 2, 0, 4],
-        [6, 0, 0, 5, 0, 10, 10, 5, 4, 0]
+        [0, 36, 0, 0, 60, 0, 72, 120, 0, 72],
+        [36, 0, 108, 60, 0, 0, 0, 24, 0, 0],
+        [0, 108, 0, 0, 84, 0, 120, 0, 0, 0],
+        [0, 60, 0, 0, 72, 120, 0, 0, 48, 60],
+        [60, 0, 84, 72, 0, 0, 60, 12, 0, 0],
+        [0, 0, 0, 120, 0, 0, 12, 0, 0, 120],
+        [72, 0, 120, 0, 60, 12, 0, 60, 0, 120],
+        [120, 24, 0, 0, 12, 0, 60, 0, 24, 60],
+        [0, 0, 0, 48, 0, 0, 0, 24, 0, 48],
+        [72, 0, 0, 60, 0, 120, 120, 60, 48, 0]
     ]
     ```
-- O algoritmo busca a melhor alocação possível de forma levando em consideração:
+- O algoritmo busca a melhor alocação possível levando em consideração:
     1. A taxa de comunicação entre os pods
         - Sendo interessante alocar no mesmo nós os pods que tenham maior taxa de comunicação
     2. O consumo de CPU
@@ -87,9 +87,9 @@ prob_mutacao = 0.3 # Probabilidade de mutação
 
 **Controle da Infraestrutura**
 
-As características de memória e cpu tanto dos Nós quanto dos PODs podem ser alteradas diretamente nas suas respectivas matrizes.
+As características de memória e cpu tanto dos Nós quanto dos PODs podem ser alteradas diretamente em suas respectivas matrizes.
 
-> **Note**: Para alteração da quantidade de Nós e de Pods é necessário alterar as variáveis numero_nos e numero_pod. Também é necessário adequar a matriz de relacionamentos conforme a nova quantidade de PODs inseridas.
+> **Note**: Para alteração da quantidade de Nós e de Pods é necessário alterar as variáveis: *numero_nos* e *numero_pod*. Também é necessário adequar a matriz de relacionamentos conforme a nova quantidade de PODs inseridas.
 
 ## Resultado do algoritmo
 
@@ -100,11 +100,11 @@ Exemplo de utilização:
 ---------------------------------------------
 
 Matriz dos Nos:
-Nó 0: Memória=1024 CPU=1000
+Nó 0: Memória=600 CPU=600
 Nó 1: Memória=1024 CPU=1001
 Nó 2: Memória=1024 CPU=1002
-Quantidade total de CPU dos Nós: 3003
-Quantidade total de Memória dos Nós: 3072
+Quantidade total de CPU dos Nós: 2603
+Quantidade total de Memória dos Nós: 2648
 
 Matriz de Pods:
 Pod 0: Memória=137 CPU=192
@@ -121,48 +121,50 @@ Quantidade total de CPU requerida pelos PODs: 1567
 Quantidade total de Memória requerida pelos PODs: 1397
 
 Matriz de Relacionamentos:
-[0, 3, 0, 0, 5, 0, 6, 10, 0, 6]
-[3, 0, 9, 5, 0, 0, 0, 2, 0, 0]
-[0, 9, 0, 0, 7, 0, 10, 0, 0, 0]
-[0, 5, 0, 0, 6, 10, 0, 0, 4, 5]
-[5, 0, 7, 6, 0, 0, 5, 1, 0, 0]
-[0, 0, 0, 10, 0, 0, 1, 0, 0, 10]
-[6, 0, 10, 0, 5, 1, 0, 5, 0, 10]
-[10, 2, 0, 0, 1, 0, 5, 0, 2, 5]
-[0, 0, 0, 4, 0, 0, 0, 2, 0, 4]
-[6, 0, 0, 5, 0, 10, 10, 5, 4, 0]
+[0, 36, 0, 0, 60, 0, 72, 120, 0, 72]
+[36, 0, 108, 60, 0, 0, 0, 24, 0, 0]
+[0, 108, 0, 0, 84, 0, 120, 0, 0, 0]
+[0, 60, 0, 0, 72, 120, 0, 0, 48, 60]
+[60, 0, 84, 72, 0, 0, 60, 12, 0, 0]
+[0, 0, 0, 120, 0, 0, 12, 0, 0, 120]
+[72, 0, 120, 0, 60, 12, 0, 60, 0, 120]
+[120, 24, 0, 0, 12, 0, 60, 0, 24, 60]
+[0, 0, 0, 48, 0, 0, 0, 24, 0, 48]
+[72, 0, 0, 60, 0, 120, 120, 60, 48, 0]
 
 ---------------------------------------------
 O algoritmo pode otimizar a alocação...
-Melhor indivíduo da geração 1: [2, 0, 0, 2, 2, 2, 2, 0, 0, 2], Aptidão: 77
-Melhor indivíduo da geração 2: [2, 0, 0, 2, 2, 2, 2, 0, 0, 2], Aptidão: 77
+Melhor indivíduo da geração 1: [1, 1, 1, 2, 2, 2, 1, 1, 0, 1], Aptidão: 984
+Melhor indivíduo da geração 2: [1, 1, 1, 2, 1, 2, 1, 1, 0, 1], Aptidão: 1048
 .
 .
 .
-Melhor indivíduo da geração 50: [2, 2, 2, 1, 2, 1, 2, 2, 1, 1], Aptidão: 96
+Melhor indivíduo da geração 50: [1, 1, 1, 0, 1, 0, 1, 1, 0, 0], Aptidão: 1152
 ---------------------------------------------
 Melhor alocação encontrada:
-Alocação: [2, 2, 2, 1, 2, 1, 2, 2, 1, 1]
-Aptidão: 96
-O POD 0 está alocado no Nó '2'
-O POD 1 está alocado no Nó '2'
-O POD 2 está alocado no Nó '2'
-O POD 3 está alocado no Nó '1'
-O POD 4 está alocado no Nó '2'
-O POD 5 está alocado no Nó '1'
-O POD 6 está alocado no Nó '2'
-O POD 7 está alocado no Nó '2'
-O POD 8 está alocado no Nó '1'
-O POD 9 está alocado no Nó '1'
-Recursos utilizados Nó 0: Memória = 0 CPU = 0
-Recursos utilizados Nó 1: Memória = 492 CPU = 617
-Recursos utilizados Nó 2: Memória = 905 CPU = 950
-O somatório do peso do relacionamento dos pods do nó 0 é 0
-O somatório do peso do relacionamento dos pods do nó 1 é 33
-O somatório do peso do relacionamento dos pods do nó 2 é 63
+Alocação: [1, 1, 1, 0, 1, 0, 1, 1, 0, 0]
+Aptidão: 1152
+O POD 0 está alocado no Nó '1'
+O POD 1 está alocado no Nó '1'
+O POD 2 está alocado no Nó '1'
+O POD 3 está alocado no Nó '0'
+O POD 4 está alocado no Nó '1'
+O POD 5 está alocado no Nó '0'
+O POD 6 está alocado no Nó '1'
+O POD 7 está alocado no Nó '1'
+O POD 8 está alocado no Nó '0'
+O POD 9 está alocado no Nó '0'
+Recursos utilizados Nó 0: Memória = 492 CPU = 617
+Recursos utilizados Nó 1: Memória = 905 CPU = 950
+Recursos utilizados Nó 2: Memória = 0 CPU = 0
+O somatório do peso do relacionamento dos pods do nó 0 é 396
+O somatório do peso do relacionamento dos pods do nó 1 é 756
+O somatório do peso do relacionamento dos pods do nó 2 é 0
 ```
 O algoritmo irá retornar o melhor indivíduo (melhor alocação) de cada uma das gerações. Ao final o Algoritmo retorna a melhor alocação e a melhor aptidão encontrada.
 
-O Algoritmo também irá retornar um grafico representando a evolução das alocações até a alocação ótmia encontrada.
+O Algoritmo também irá retornar um grafico representando a evolução das alocações até a alocação ótmia encontrada. O grafico a seguir apresenta o concatenado de 4 testes que foram executados.
 
 ![Melhor alocação encontrada](img/Figure_1.png)
+
+Representando a convergência para o mesmo valor de alocação e mesma aptidão. É preciso salientar porém, que não significa que das 4 iterações todas retornaram a mesma alocação. Pois, é possível, dado o contexto, que alocações diferentes resultem em um mesmo valor de aptidão contanto que atenda os critérios propostos.
