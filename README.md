@@ -167,4 +167,4 @@ O Algoritmo também irá retornar um grafico representando a evolução das aloc
 
 ![Melhor alocação encontrada](img/Figure_1.png)
 
-Representando a convergência para o mesmo valor de alocação e mesma aptidão. É preciso salientar porém, que não significa que das 4 iterações todas retornaram a mesma alocação. Pois, é possível, dado o contexto, que alocações diferentes resultem em um mesmo valor de aptidão contanto que atenda os critérios propostos.
+Observando o gráfico podemos concluir a convergência o mesmo valor de aptidão. É preciso salientar porém, que isso não significa que das 4 iterações todas retornaram a mesma alocação. É possível, dado o contexto, que alocações diferentes resultem em um mesmo valor de aptidão contanto que atenda os critérios propostos.
