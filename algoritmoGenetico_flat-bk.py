@@ -26,14 +26,13 @@ Fluxo do algoritmo genético:
         - Cada vez que o algoritmo se repetir será uma nova geração criada
     10 - Retorna com a melhor solução encontrada
 """
-
 import random
 import matplotlib.pyplot as plt
 
-tam_populacao = 50
+tam_populacao = 100
 num_geracoes = 50
 prob_cruzamento = 0.9
-prob_mutacao = 0.3
+prob_mutacao = 0.2
 
 numero_nos = 3
 numero_pods = 10
@@ -73,6 +72,7 @@ def gerar_matriz_pods():
         [6, 0, 0, 5, 0, 10, 10, 5, 4, 0]
     ]
 
+
     return matriz_pods, matriz_relacionamentos
 
 # Iniciando a População
@@ -89,44 +89,97 @@ def calcular_aptidao(alocacao, matriz_nos, matriz_pods, matriz_relacionamentos):
     pesos_comunicacao = [0] * len(matriz_nos)
     aptidao = 0
 
-    # --------------- Imprimindo a matriz de alocação dos pods nos nós
-    #print('-' * 45)
-    #print(alocacao)
-    #for indice, valor in enumerate(alocacao):
-    #    print(f"O POD {indice} está no Nó '{valor}'")
+    print('-' * 45)
+    print(alocacao)
+    for indice, valor in enumerate(alocacao):
+        print(f"O POD {indice} está no Nó '{valor}'")
 
-    # --------------- Calculando o peso do relacionamento entre os pods
+    for pod, node in enumerate(alocacao):
+        somatorio_alocacao[node]['memoria'] += matriz_pods[pod]['memoria']
+        somatorio_alocacao[node]['cpu'] += matriz_pods[pod]['cpu']
+
+    for i, somatorio in enumerate(somatorio_alocacao):
+        print(f"Recursos utilizados Nó {i}: Memória = {somatorio['memoria']} CPU = {somatorio['cpu']}")
+
+
     for i, node in enumerate(alocacao):
-            for j in range(i + 1, len(alocacao)):
-                if alocacao[j] == node:
-                    pod1 = i
-                    pod2 = j
-                    peso = matriz_relacionamentos[pod1][pod2]
-                    pesos_comunicacao[node] += peso
-                    aptidao += peso
-                    
-    # --------------- Calculando o consumo de recursos dos pods nos Nós  
+        for j in range(i + 1, len(alocacao)):
+            if alocacao[j] == node:
+                pod1 = i
+                pod2 = j
+                peso = matriz_relacionamentos[pod1][pod2]
+
+    for i, node in enumerate(somatorio):
+        pesos_comunicacao[i] = sum(node.values())
+
+    for i, peso in enumerate(pesos_comunicacao):
+        print(f"O somatório do peso do relacionamento dos pods do nó {i} é {peso}")
+        
+    return aptidao
+
+
+"""
+def calcular_aptidao(alocacao, matriz_nos, matriz_pods, matriz_relacionamentos):
+    somatorio_alocacao = [{'memoria': 0, 'cpu': 0} for _ in range(len(matriz_nos))]
+    aptidao = 0
+    
+    print('-' * 45)
+    print(alocacao)
+    for indice, valor in enumerate(alocacao):
+        print(f"O POD {indice} está no Nó '{valor}'")
+        
+    for no in matriz_nos:
+        print(f"Nó {no['id']}: Memória = {no['memoria_no']} CPU = {no['cpu_no']}")
+    
     for pod, node in enumerate(alocacao):
         somatorio_alocacao[node]['memoria'] += matriz_pods[pod]['memoria']
         somatorio_alocacao[node]['cpu'] += matriz_pods[pod]['cpu']
         
-        if somatorio_alocacao[node]['cpu'] > no['cpu_no']:
-            aptidao -= somatorio_alocacao[node]['cpu'] - no['cpu_no']
-        
-        if somatorio_alocacao[node]['memoria'] > no['memoria_no']:
-            aptidao -= somatorio_alocacao[node]['memoria'] - no['memoria_no']
-
-
-    # --------------- Imprimindo o resultado do consumo de recursos
-    #for i, somatorio in enumerate(somatorio_alocacao):
-    #    print(f"Recursos utilizados Nó {i}: Memória = {somatorio['memoria']} CPU = {somatorio['cpu']}")
     
-    # --------------- Imprimindo o resultado do peso do relacionamento
-    #for i, peso in enumerate(pesos_comunicacao):
-    #    print(f"O somatório do peso do relacionamento dos pods do nó {i} é {peso}")
+    for i, somatorio in enumerate(somatorio_alocacao):
+        print(f"Recursos utilizados Nó {i}: Memória={somatorio['memoria']} CPU={somatorio['cpu']}")
         
-    return aptidao
+        
+    pesos_comunicacao = [0] * len(matriz_nos)
+    
+    for i in range(len(alocacao)):
+        for j in range(i + 1, len(alocacao)):
+            pod1 = alocacao[i]
+            pod2 = alocacao[j]
+            pesos_comunicacao[pod1] += matriz_relacionamentos[pod1][pod2]
+            pesos_comunicacao[pod2] += matriz_relacionamentos[pod1][pod2]
+    
+    for i, somatorio in enumerate(somatorio_alocacao):
+        print(f"Peso da comunicação entre os pods do nó {i}: {pesos_comunicacao[i]}")
+        
 
+    for i in range(len(alocacao)):
+        for j in range(i + 1, len(alocacao)):
+            pod1 = alocacao[i]
+            pod2 = alocacao[j]
+            aptidao += matriz_relacionamentos[pod1][pod2]
+            
+        for k, no in enumerate(matriz_nos):
+            
+            #print(f"Nó {no['id']}: Memória={no['memoria_no']} CPU={no['cpu_no']}")
+            
+            cpu_usada = sum(matriz_pods[pod]['cpu'] for pod, node in enumerate(alocacao) if node == k)
+            memoria_usada = sum(matriz_pods[pod]['memoria'] for pod, node in enumerate(alocacao) if node == k)
+            
+            #print(f"Foi usado cpu: {cpu_usada}")
+            
+            if cpu_usada > no['cpu_no']:
+                aptidao -= cpu_usada - no['cpu_no']
+            #else:
+                #aptidao += no['cpu_no'] - cpu_usada  # Adiciona quantidade não utilizada de CPU à aptidão
+            
+            if memoria_usada > no['cpu_no']:
+                aptidao -= memoria_usada - no['memoria_no']
+            #else:
+                #aptidao += no['memoria_no'] - memoria_usada  # Adiciona quantidade não utilizada de memória à aptidão
+       
+    return aptidao
+"""
 # Seleciona os pais para realizar o cruzamento e gerar novos filhos (método roleta)
 def selecionar_pais(populacao, matriz_relacionamentos):
     pais_selecionados=[]
@@ -177,9 +230,6 @@ def realizar_mutacao(filhos, prob_mutacao):
 def algoritmo_genetico(numero_pods, numero_nos, matriz_relacionamentos, tam_populacao, prob_mutacao, num_geracoes):
     populacao = iniciar_pop(numero_pods, numero_nos, tam_populacao)
     
-    melhor_alocacao = None
-    melhor_aptidao = float('-inf')  # Inicializando com o menor valor possível
-    
     melhores_aptidoes = []
     
     for geracao in range(num_geracoes):
@@ -187,16 +237,17 @@ def algoritmo_genetico(numero_pods, numero_nos, matriz_relacionamentos, tam_popu
         filhos = realizar_cruzamento(pais_selecionados, prob_cruzamento)
         realizar_mutacao(filhos, prob_mutacao)
         populacao = filhos
+
+        melhor_alocacao = max(populacao, key=lambda alocacao: calcular_aptidao(alocacao, matriz_nos, matriz_pods, matriz_relacionamentos))
+        melhor_aptidao = calcular_aptidao(melhor_alocacao, matriz_nos, matriz_pods, matriz_relacionamentos)
         
-        for alocacao in populacao:
-            aptidao = calcular_aptidao(alocacao, matriz_nos, matriz_pods, matriz_relacionamentos)
-            if aptidao > melhor_aptidao:
-                melhor_alocacao = alocacao
-                melhor_aptidao = aptidao
-                
         melhores_aptidoes.append(melhor_aptidao)
         
         print(f"Melhor indivíduo da geração {geracao + 1}: {melhor_alocacao}, Aptidão: {melhor_aptidao}")
+
+            
+    melhor_alocacao = max(populacao, key=lambda alocacao: calcular_aptidao(alocacao, matriz_nos, matriz_pods, matriz_relacionamentos))
+    melhor_aptidao = calcular_aptidao(melhor_alocacao, matriz_nos, matriz_pods, matriz_relacionamentos)
 
     # Plotando o gráfico 1 - Gráfico da evolução do Algoritmo Genético
     plt.plot(range(1, num_geracoes + 1), melhores_aptidoes)
@@ -205,51 +256,26 @@ def algoritmo_genetico(numero_pods, numero_nos, matriz_relacionamentos, tam_popu
     plt.title('Evolução das Gerações')
     plt.show()
     
-    # Plotando o gráfico 2 - Gráfico do consumo de recursos
-    print('-' * 45)
-    print("Melhor alocação encontrada:")
+    # Plotando o gráfico 2 - Gráfico da alocação da melhor aptidão
+    
+    print("\nMelhor alocação encontrada:")
     print(f"Alocação: {melhor_alocacao}")
     print(f"Aptidão: {melhor_aptidao}")
     
-    # Imprimindo a alocação dos pods nos nós
-    for pod, node in enumerate(melhor_alocacao):
-        print(f"O POD {pod} está alocado no Nó '{node}'")
-    # Calculando o consumo de recursos utilizados nos nós
-    somatorio_alocacao = [{'memoria': 0, 'cpu': 0} for _ in range(len(matriz_nos))]
-    for pod, node in enumerate(melhor_alocacao):
-        somatorio_alocacao[node]['memoria'] += matriz_pods[pod]['memoria']
-        somatorio_alocacao[node]['cpu'] += matriz_pods[pod]['cpu']
     
-    # Imprimindo o consumo de recursos utilizados nos nós
-    for i, somatorio in enumerate(somatorio_alocacao):
-        print(f"Recursos utilizados Nó {i}: Memória = {somatorio['memoria']} CPU = {somatorio['cpu']}")
-    
-    # Calculando o somatório do peso do relacionamento dos pods nos nós
-    pesos_comunicacao = [0] * len(matriz_nos)
-    for i, node in enumerate(melhor_alocacao):
-        for j in range(i + 1, len(melhor_alocacao)):
-            if melhor_alocacao[j] == node:
-                pod1 = i
-                pod2 = j
-                peso = matriz_relacionamentos[pod1][pod2]
-                pesos_comunicacao[node] += peso
-    
-    # Imprimindo o somatório do peso do relacionamento dos pods nos nós
-    for i, peso in enumerate(pesos_comunicacao):
-        print(f"O somatório do peso do relacionamento dos pods do nó {i} é {peso}")
 
     return melhor_alocacao, melhor_aptidao
 
 # Exemplo de uso do algoritmo
 print('-' * 45)
-print(' Alocação de recursos em um Cluster')
+print(' Alocação de recursos em um Cluster K8s')
 print('-' * 45)
-#print("# Gerando os Nós da Infraestrutura #")
+print("# Gerando os Nós da Infraestrutura #")
 # Gerando Matriz dos Nós
 matriz_nos = gerar_matriz_nos()
 
-#print('-' * 45)
-#print("# Gerando os Pods da Infraestrutura #")
+print('-' * 45)
+print("# Gerando os Pods da Infraestrutura #")
 
 # Gerando Matriz dos Pods
 matriz_pods, matriz_relacionamentos = gerar_matriz_pods()
