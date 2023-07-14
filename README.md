@@ -165,4 +165,4 @@ O algoritmo irá retornar o melhor indivíduo (melhor alocação) de cada uma da
 
 O Algoritmo também irá retornar um grafico representando a evolução das alocações até a alocação ótmia encontrada.
 
-![Melhor alocação encontrada](img\Figure_1.png)
+![Melhor alocação encontrada](img/Figure_1.png)
