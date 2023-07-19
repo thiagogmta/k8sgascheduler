@@ -33,16 +33,16 @@ import matplotlib.pyplot as plt
 tam_populacao = 50
 num_geracoes = 50
 prob_cruzamento = 0.9
-prob_mutacao = 0.3
+prob_mutacao = 0.2
 
 numero_nos = 3
 numero_pods = 10
 
 def gerar_matriz_nos():
     matriz_nos=[
-        {"id": 0, "cpu_no": 600, "memoria_no": 600},
-        {"id": 1, "cpu_no": 1001, "memoria_no": 1024},
-        {"id": 2, "cpu_no": 1002, "memoria_no": 1024}
+        {"id": 0, "cpu_no": 1001, "memoria_no": 1024},
+        {"id": 1, "cpu_no": 1002, "memoria_no": 1024},
+        {"id": 2, "cpu_no": 1003, "memoria_no": 1024}
     ]
     return matriz_nos
         
@@ -166,13 +166,13 @@ def realizar_cruzamento(pais_selecionados, prob_cruzamento):
             filhos.append(pai2)
     return filhos
 
-
 # Realiza a mutação para que novos filhos sejam gerados
-def realizar_mutacao(filhos, prob_mutacao):
+def realizar_mutacao(filhos, prob_mutacao, numero_nos):
     for i in range(len(filhos)):
         if random.random() < prob_mutacao:
-            indice1, indice2 = random.sample(range(len(filhos[i])), 2)
-            filhos[i][indice1], filhos[i][indice2] = filhos[i][indice2], filhos[i][indice1]
+            for j in range(len(filhos[i])):
+                if random.random() < prob_mutacao:
+                    filhos[i][j] = random.randint(0, numero_nos - 1)
 
 def algoritmo_genetico(numero_pods, numero_nos, matriz_relacionamentos, tam_populacao, prob_mutacao, num_geracoes):
     populacao = iniciar_pop(numero_pods, numero_nos, tam_populacao)
@@ -181,11 +181,12 @@ def algoritmo_genetico(numero_pods, numero_nos, matriz_relacionamentos, tam_popu
     melhor_aptidao = float('-inf')  # Inicializando com o menor valor possível
     
     melhores_aptidoes = []
+    historico_aptidoes = []
     
     for geracao in range(num_geracoes):
         pais_selecionados = selecionar_pais(populacao, matriz_relacionamentos)
         filhos = realizar_cruzamento(pais_selecionados, prob_cruzamento)
-        realizar_mutacao(filhos, prob_mutacao)
+        realizar_mutacao(filhos, prob_mutacao, numero_nos)
         populacao = filhos
         
         for alocacao in populacao:
@@ -195,17 +196,9 @@ def algoritmo_genetico(numero_pods, numero_nos, matriz_relacionamentos, tam_popu
                 melhor_aptidao = aptidao
                 
         melhores_aptidoes.append(melhor_aptidao)
-        
+        historico_aptidoes.extend([aptidao for alocacao in populacao])
         print(f"Melhor indivíduo da geração {geracao + 1}: {melhor_alocacao}, Aptidão: {melhor_aptidao}")
 
-    # Plotando o gráfico 1 - Gráfico da evolução do Algoritmo Genético
-    plt.plot(range(1, num_geracoes + 1), melhores_aptidoes)
-    plt.xlabel('Geração')
-    plt.ylabel('Melhor Aptidão')
-    plt.title('Evolução das Gerações')
-    plt.show()
-    
-    # Plotando o gráfico 2 - Gráfico do consumo de recursos
     print('-' * 45)
     print("Melhor alocação encontrada:")
     print(f"Alocação: {melhor_alocacao}")
@@ -214,8 +207,10 @@ def algoritmo_genetico(numero_pods, numero_nos, matriz_relacionamentos, tam_popu
     # Imprimindo a alocação dos pods nos nós
     for pod, node in enumerate(melhor_alocacao):
         print(f"O POD {pod} está alocado no Nó '{node}'")
+        
     # Calculando o consumo de recursos utilizados nos nós
     somatorio_alocacao = [{'memoria': 0, 'cpu': 0} for _ in range(len(matriz_nos))]
+    
     for pod, node in enumerate(melhor_alocacao):
         somatorio_alocacao[node]['memoria'] += matriz_pods[pod]['memoria']
         somatorio_alocacao[node]['cpu'] += matriz_pods[pod]['cpu']
@@ -238,6 +233,15 @@ def algoritmo_genetico(numero_pods, numero_nos, matriz_relacionamentos, tam_popu
     for i, peso in enumerate(pesos_comunicacao):
         print(f"O somatório do peso do relacionamento dos pods do nó {i} é {peso}")
 
+    # Plotando o gráfico 1 - Gráfico da evolução do Algoritmo Genético
+    plt.plot(range(1, num_geracoes * tam_populacao + 1), historico_aptidoes)
+    plt.xlabel('Geração')
+    plt.ylabel('Aptidão')
+    plt.title('Evolução das Aptidões')
+    plt.show()  
+
+    # Plotando o gráfico 2 - Gráfico do consumo de recursos
+    
     return melhor_alocacao, melhor_aptidao
 
 # Exemplo de uso do algoritmo
