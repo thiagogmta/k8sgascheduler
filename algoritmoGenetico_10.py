@@ -40,25 +40,24 @@ numero_pods = 10
 
 def gerar_matriz_nos():
     matriz_nos=[
-        {"id": 0, "cpu_no": 1001, "memoria_no": 1024},
-        {"id": 1, "cpu_no": 1002, "memoria_no": 1024},
-        {"id": 2, "cpu_no": 1003, "memoria_no": 1024}
+        {"id": 0, "cpu_no": 1000, "memoria_no": 1024},
+        {"id": 1, "cpu_no": 1000, "memoria_no": 1024},
+        {"id": 2, "cpu_no": 1000, "memoria_no": 1024}
     ]
     return matriz_nos
         
 def gerar_matriz_pods():
     matriz_pods = [
         {'id': 0, 'cpu': 153, 'memoria': 109},
-        {'id': 1, 'cpu': 139, 'memoria': 141},
-        {'id': 2, 'cpu': 110, 'memoria': 106},
-        {'id': 3, 'cpu': 111, 'memoria': 84},
-        {'id': 4, 'cpu': 84, 'memoria': 132},
-        {'id': 5, 'cpu': 124, 'memoria': 81},
-        {'id': 6, 'cpu': 158, 'memoria': 88},
-        {'id': 7, 'cpu': 114, 'memoria': 144},
-        {'id': 8, 'cpu': 152, 'memoria': 134},
-        {'id': 9, 'cpu': 105, 'memoria': 92}
-
+        {'id': 1, 'cpu': 153, 'memoria': 109},
+        {'id': 2, 'cpu': 153, 'memoria': 109},
+        {'id': 3, 'cpu': 153, 'memoria': 109},
+        {'id': 4, 'cpu': 153, 'memoria': 109},
+        {'id': 5, 'cpu': 153, 'memoria': 109},
+        {'id': 6, 'cpu': 153, 'memoria': 109},
+        {'id': 7, 'cpu': 153, 'memoria': 109},
+        {'id': 8, 'cpu': 153, 'memoria': 109},
+        {'id': 9, 'cpu': 153, 'memoria': 109}
     ]
     
     matriz_relacionamentos = [

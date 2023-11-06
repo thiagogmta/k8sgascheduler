@@ -65,13 +65,13 @@ def gerar_matriz_pods():
         {'id': 14, 'cpu': 158, 'memoria': 88},
         {'id': 15, 'cpu': 114, 'memoria': 144},
         {'id': 16, 'cpu': 152, 'memoria': 134},
-        {'id': 18, 'cpu': 105, 'memoria': 92},
-        {'id': 19, 'cpu': 153, 'memoria': 109},
-        {'id': 20, 'cpu': 139, 'memoria': 141},
-        {'id': 21, 'cpu': 110, 'memoria': 106},
-        {'id': 22, 'cpu': 111, 'memoria': 84},
-        {'id': 23, 'cpu': 84, 'memoria': 132},
-        {'id': 24, 'cpu': 124, 'memoria': 81}
+        {'id': 17, 'cpu': 105, 'memoria': 92},
+        {'id': 18, 'cpu': 153, 'memoria': 109},
+        {'id': 19, 'cpu': 139, 'memoria': 141},
+        {'id': 20, 'cpu': 110, 'memoria': 106},
+        {'id': 21, 'cpu': 111, 'memoria': 84},
+        {'id': 22, 'cpu': 84, 'memoria': 132},
+        {'id': 23, 'cpu': 124, 'memoria': 81}
     ]
     
     matriz_relacionamentos = [
