@@ -26,11 +26,19 @@ def calcular_aptidao(alocacao, matriz_nos, matriz_pods, matriz_relacionamentos):
         somatorio_alocacao[node]['memoria'] += matriz_pods[pod]['memoria']
         somatorio_alocacao[node]['cpu'] += matriz_pods[pod]['cpu']
 
+        # Penalização pelo consumo excedente de cpu + bonificação pela alocação apropriada
+         # Falta inserir o qt de nos
         if somatorio_alocacao[node]['cpu'] > matriz_nos[node]['cpu_no']:
             aptidao -= somatorio_alocacao[node]['cpu'] - matriz_nos[node]['cpu_no']
+        else:
+            aptidao += somatorio_alocacao[node]['cpu']
 
+        # Penalização pelo consumo excedente de cpu + bonificação pela alocação apropriada
+         # Falta inserir o qt de nos
         if somatorio_alocacao[node]['memoria'] > matriz_nos[node]['memoria_no']:
             aptidao -= somatorio_alocacao[node]['memoria'] - matriz_nos[node]['memoria_no']
+        else:
+            aptidao += somatorio_alocacao[node]['memoria']
 
     return aptidao
 
@@ -58,21 +66,34 @@ matriz_pods = [
     {'id': 9, 'cpu': 153, 'memoria': 109}
 ]
 
+# matriz_relacionamentos = [
+#     [0, 36, 0, 0, 60, 0, 0, 120, 0, 0],
+#     [36, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+#     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+#     [0, 0, 0, 0, 72, 0, 0, 0, 0, 0],
+#     [60, 0, 0, 72, 0, 0, 0, 0, 0, 0],
+#     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+#     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+#     [120, 0, 0, 0, 0, 0, 0, 0, 0, 160],
+#     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+#     [0, 0, 0, 0, 0, 0, 0, 160, 0, 0]
+# ]
+
 matriz_relacionamentos = [
-    [0, 36, 0, 0, 60, 0, 0, 120, 0, 0],
-    [36, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 72, 0, 0, 0, 0, 0],
-    [60, 0, 0, 72, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [120, 0, 0, 0, 0, 0, 0, 0, 0, 160],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 160, 0, 0]
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 ]
 
 #1 - Alocação Algoritmo:
-#alocacao = [0, 0, 1, 0, 0, 2, 1, 0, 1, 0]
+alocacao = [2, 0, 2, 2, 2, 0, 0, 2, 0, 2]
 
 #2 - Alocação Simulador
 #alocacao = [2, 0, 1, 0, 2, 1, 2, 1, 0, 2]
@@ -80,7 +101,8 @@ matriz_relacionamentos = [
 #3 - Alocação do Ambiente
 #alocacao = [0, 1, 2, 1, 2, 2, 0, 1, 0, 2]
 
-alocacao = [0, 1, 2, 1, 2, 2, 0, 1, 0, 2]
+#4 - Alocacao manual
+#alocacao = [0, 0, 0, 1, 1, 1, 2, 2, 2, 2]
 
 aptidao = calcular_aptidao(alocacao, matriz_nos, matriz_pods, matriz_relacionamentos)
 

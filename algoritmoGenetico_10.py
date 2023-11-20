@@ -110,21 +110,20 @@ def calcular_aptidao(alocacao, matriz_nos, matriz_pods, matriz_relacionamentos):
         somatorio_alocacao[node]['memoria'] += matriz_pods[pod]['memoria']
         somatorio_alocacao[node]['cpu'] += matriz_pods[pod]['cpu']
         
-        if somatorio_alocacao[node]['cpu'] > no['cpu_no']:
-            aptidao -= somatorio_alocacao[node]['cpu'] - no['cpu_no']
-        
-        if somatorio_alocacao[node]['memoria'] > no['memoria_no']:
-            aptidao -= somatorio_alocacao[node]['memoria'] - no['memoria_no']
+        # Penalização pelo consumo excedente de cpu + bonificação pela alocação apropriada
+        # Falta inserir o qt de nos
+        if somatorio_alocacao[node]['cpu'] > matriz_nos[node]['cpu_no']:
+            aptidao -= somatorio_alocacao[node]['cpu'] - matriz_nos[node]['cpu_no']
+        else:
+            aptidao += somatorio_alocacao[node]['cpu']
 
+        # Penalização pelo consumo excedente de cpu + bonificação pela alocação apropriada
+         # Falta inserir o qt de nos
+        if somatorio_alocacao[node]['memoria'] > matriz_nos[node]['memoria_no']:
+            aptidao -= somatorio_alocacao[node]['memoria'] - matriz_nos[node]['memoria_no']
+        else:
+            aptidao += somatorio_alocacao[node]['memoria']
 
-    # --------------- Imprimindo o resultado do consumo de recursos
-    #for i, somatorio in enumerate(somatorio_alocacao):
-    #    print(f"Recursos utilizados Nó {i}: Memória = {somatorio['memoria']} CPU = {somatorio['cpu']}")
-    
-    # --------------- Imprimindo o resultado do peso do relacionamento
-    #for i, peso in enumerate(pesos_comunicacao):
-    #    print(f"O somatório do peso do relacionamento dos pods do nó {i} é {peso}")
-        
     return aptidao
 
 # Seleciona os pais para realizar o cruzamento e gerar novos filhos (método roleta)
