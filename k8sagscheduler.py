@@ -34,30 +34,36 @@ Fluxo do algoritmo genético:
 
 import random
 import matplotlib.pyplot as plt
+import numpy as np
 
 # --------------- Variáveis para o GA --------------- #"
-tam_populacao = 100         # Tamaho da população do GA
-num_geracoes = 50           # Numero de gerações do GA
+tam_populacao = 100          # Tamaho da população do GA
+num_geracoes = 50            # Numero de gerações do GA
 prob_cruzamento = 0.8       # Probabilidade de cruzamento (80%)
 prob_mutacao = 0.2          # Probabilidade de mutação (20%)
-qt_teste = 1                # Quantidade de vezes que o teste será executado por padrão
-numero_nos = 11              # Quantidade padrão de nós
-cpu_no = 1000               # Quantidade de CPU de cada Nó
-mem_no = 1024               # Quantidade de Memória de cada Nó
-numero_pods = 50            # Quantidade de PODs a serem alocados
-cpu_pod = 153               # Quantidade de CPU de cada POD
-mem_pod = 109               # Quantidade de Memória de cada POD
-taxa_rel = 20               # Porcentagem de preenchimento da matriz de relacionamentos
+qt_teste = 1                # Qt de vezes que o teste será executado por padrão
+numero_nos = 4              # Qt padrão de nós
+cpu_no = 1000               # Qt de CPU de cada Nó
+mem_no = 1024               # Qt de Memória de cada Nó
+numero_pods = 20            # Qt de PODs a serem alocados
+cpu_pod = 153               # Qt de CPU de cada POD
+mem_pod = 109               # Qt de Memória de cada POD
+taxa_rel = 50               # Porcentagem de preenchimento da matriz de relacionamentos
 
 print("# --------------- Entre com os Dados Para o GA --------------- #")
-qt_teste = input(f"Entre com a quantidade de vezes que o teste será executado (tecle enter para padrão {qt_teste}): ")
-numero_nos = input(f"Entre com a quantidade de Nós do cluster (tecle enter para padrão {numero_nos}): ")
-numero_pods = input(f"Entre com a quantidade de PODs do cluster (tecle enter para padrão {numero_pods}): ")
+qt = input(f"Entre com a quantidade de vezes que o teste será executado (tecle enter para padrão {qt_teste}): ")
 
-# Caso as variáveis estejam vazias, preencher com os valores padrão
-qt_teste = 1 if qt_teste == '' else int(qt_teste)
-numero_nos = 3 if numero_nos == '' else int(numero_nos)
-numero_pods = 10 if numero_pods == '' else int(numero_pods)
+n_nos = input(f"Entre com a quantidade de Nós do cluster (tecle enter para padrão {numero_nos}): ")
+
+n_pods = input(f"Entre com a quantidade de PODs do cluster (tecle enter para padrão {numero_pods}): ")
+
+# Caso as variáveis não estejam vazias, atualizar os valores
+if qt !='':
+    qt_teste = int(qt)
+if n_nos !='':
+    numero_nos = int(n_nos)
+if n_pods !='':
+    numero_pods = int(n_pods)
 
 # Função para gerar a matriz dos Nós
 def gerar_matriz_nos(numero_nos, cpu_no, mem_no):
@@ -68,22 +74,22 @@ def gerar_matriz_nos(numero_nos, cpu_no, mem_no):
     return matriz_nos
 
 # Função para gerar matrizes de PODs e de Relacionamentos
-def gerar_matrizes(num_pods, cpu_pod, mem_pod, taxa_rel):
+def gerar_matrizes(numero_pods, cpu_pod, mem_pod, taxa_rel):
     # Criar matriz_pod
     matriz_pods = [
         {"id": i, "cpu_pod": cpu_pod, "memoria_pod": mem_pod}
-        for i in range(num_pods)
+        for i in range(numero_pods)
     ]
 
     # Criar matriz_relacionamentos
     matriz_relacionamentos = [
-        [round(random.uniform(0, 1), 2) if random.uniform(0, 100) < taxa_rel else 0 for _ in range(num_pods)]
-        for _ in range(num_pods)
+        [round(random.uniform(0, 1), 2) if random.uniform(0, 100) < taxa_rel else 0 for _ in range(numero_pods)]
+        for _ in range(numero_pods)
     ]
 
     # Tornar a matriz_relacionamentos simétrica
-    for i in range(num_pods):
-        for j in range(i + 1, num_pods):
+    for i in range(numero_pods):
+        for j in range(i + 1, numero_pods):
             matriz_relacionamentos[i][j] = matriz_relacionamentos[j][i]
 
     return matriz_pods, matriz_relacionamentos
@@ -106,7 +112,6 @@ def iniciar_pop(numero_pods, numero_nos, tam_populacao):
 def func_alocacao(alocacao):
     nos_utilizados = set(alocacao)
     num_nos_utilizados = len(nos_utilizados)
-    print (f"Numero de Nós utilizados: {num_nos_utilizados}")
     return num_nos_utilizados
 
 # --------------- S(x) - Função de Consumo
@@ -152,8 +157,8 @@ def func_consumo(alocacao, matriz_nos, matriz_pods, peso):
         #print(f"Porcentagem de uso da CPU: {media_cpu}%")
         #print("---")
 
-    print(f"Somatório total de consumo de memória: {soma_porc_mem}")
-    print(f"Somatório total de consumo de CPU: {soma_porc_cpu}")
+    #print(f"Somatório total de consumo de memória: {soma_porc_mem}")
+    #print(f"Somatório total de consumo de CPU: {soma_porc_cpu}")
 
     return soma_porc_mem, soma_porc_cpu
 
@@ -244,19 +249,22 @@ def taxa_relacionamento(alocacao, matriz_nos, matriz_pods, matriz_relacionamento
 # de alocação de memória subtraido a infactibilidade de alocação de cpu.
 def calcular_aptidao(alocacao, matriz_nos, matriz_pods, matriz_relacionamentos):
 
-    print("# --------------------------------------------- #")
-    print (alocacao)
+
     
     somatorio_mem, somatorio_cpu = func_consumo(alocacao, matriz_nos, matriz_pods, 1)
     num_nos = func_alocacao(alocacao)
     somatorio_inf_mem, somatorio_inf_cpu = func_infactibilidade(alocacao, matriz_nos, matriz_pods)
     taxa_rel = taxa_relacionamento(alocacao, matriz_nos, matriz_pods, matriz_relacionamentos)
     
-    print(f"Penalidade = {somatorio_inf_cpu+somatorio_inf_mem}")
-    print(f"Relacionamento = {taxa_rel}")
     aptidao = (somatorio_mem / num_nos + somatorio_cpu / num_nos) - (somatorio_inf_mem + somatorio_inf_cpu) + taxa_rel
-
-    print(f"Aptidão: {aptidao}")
+    
+    # print("# --------------------------------------------- #")
+    # print (alocacao)
+    # print (f"Numero de Nós utilizados: {num_nos}")
+    # print(f"Penalidade = {somatorio_inf_cpu+somatorio_inf_mem}")
+    # print(f"Relacionamento = {taxa_rel}")
+    
+    # print(f"Aptidão: {aptidao}")
     
     return aptidao
 
@@ -307,7 +315,7 @@ def realizar_mutacao(filhos, prob_mutacao, numero_nos):
                 if random.random() < prob_mutacao:
                     filhos[i][j] = random.randint(0, numero_nos - 1)
 
-def algoritmo_genetico(numero_pods, numero_nos, matriz_relacionamentos, tam_populacao, prob_mutacao, num_geracoes):
+def algoritmo_genetico(numero_pods, numero_nos, matriz_relacionamentos, tam_populacao, prob_mutacao, num_geracoes, teste):
     populacao = iniciar_pop(numero_pods, numero_nos, tam_populacao)
     
     melhor_alocacao = None
@@ -334,11 +342,7 @@ def algoritmo_genetico(numero_pods, numero_nos, matriz_relacionamentos, tam_popu
         melhores_alocacoes.append(melhor_alocacao)
         todas_aptidoes.append([calcular_aptidao(alocacao, matriz_nos, matriz_pods, matriz_relacionamentos) for alocacao in populacao])
 
-        #historico_aptidoes.extend([aptidao for alocacao in populacao])
-        #print(f"Melhor indivíduo da geração {geracao + 1}: {melhor_alocacao}, Aptidão: {melhor_aptidao}")
-
     print('-' * 45)
-    print("Melhor alocação encontrada:")
     print(f"Alocação: {melhor_alocacao}")
     print(f"Aptidão: {melhor_aptidao}")
     
@@ -370,25 +374,16 @@ def algoritmo_genetico(numero_pods, numero_nos, matriz_relacionamentos, tam_popu
     # Imprimindo o somatório do peso do relacionamento dos pods nos nós
     for i, peso in enumerate(pesos_comunicacao):
         print(f"O somatório do peso do relacionamento dos pods do nó {i} é {peso}")
-
-    # Plotando o gráfico 1 - Gráfico da evolução do Algoritmo Genético
-    
-    plt.plot(range(1, num_geracoes + 1), melhores_aptidoes, label='Evolução da Aptidão')
-    plt.xlabel('Geração')
-    plt.ylabel('Aptidão')
-    plt.title('Evolução das Gerações')
-    plt.legend()
-    plt.show()
         
-    return melhor_alocacao, melhor_aptidao
-
-print('-' * 45)
-print(' Alocação de recursos em um Cluster')
-print('-' * 45)
+    return melhor_alocacao, melhor_aptidao, melhores_aptidoes
 
 matriz_nos = gerar_matriz_nos(numero_nos, cpu_no, mem_no)
 matriz_pods, matriz_relacionamentos = gerar_matrizes(numero_pods, cpu_pod, mem_pod, taxa_rel)
 print("")
+
+resultados_aptidoes =[]
+melhor_aptidao_global = float('-inf')
+melhor_alocacao_global = None
 
 for teste in range(qt_teste):
     mem_total_no = 0
@@ -403,40 +398,80 @@ for teste in range(qt_teste):
         mem_total_no += no['memoria_no']
         cpu_total_no += no['cpu_no']
         
-    # Exibindo a matriz dos Nos
-    print("Matriz dos Nos:")
-    for no in matriz_nos:
-        print(f"Nó {no['id']}: Memória={no['memoria_no']} CPU={no['cpu_no']}")
+    # # Exibindo a matriz dos Nos
+    # print("Matriz dos Nos:")
+    # for no in matriz_nos:
+    #     print(f"Nó {no['id']}: Memória={no['memoria_no']} CPU={no['cpu_no']}")
     
-    print(f"Quantidade total de CPU dos Nós: {cpu_total_no}")
-    print(f"Quantidade total de Memória dos Nós: {mem_total_no}")
-    print("")
+    # print(f"Quantidade total de CPU dos Nós: {cpu_total_no}")
+    # print(f"Quantidade total de Memória dos Nós: {mem_total_no}")
+    # print("")
     
-    # Exibindo a matriz de pods
-    print("Matriz de Pods:")
-    for pod in matriz_pods:
-        print(f"Pod {pod['id']}: Memória={pod['memoria_pod']} CPU={pod['cpu_pod']}")
+    # # Exibindo a matriz de pods
+    # print("Matriz de Pods:")
+    # for pod in matriz_pods:
+    #     print(f"Pod {pod['id']}: Memória={pod['memoria_pod']} CPU={pod['cpu_pod']}")
         
-    print(f"Quantidade total de CPU requerida pelos PODs: {cpu_total_pod}")
-    print(f"Quantidade total de Memória requerida pelos PODs: {mem_total_pod}")
-    print("")
+    # print(f"Quantidade total de CPU requerida pelos PODs: {cpu_total_pod}")
+    # print(f"Quantidade total de Memória requerida pelos PODs: {mem_total_pod}")
+    # print("")
     
-    # Exibindo a matriz de relacionamentos (apenas os valores de peso)
-    print("\nMatriz de Relacionamentos:")
-    for linha in matriz_relacionamentos:
-        print(linha)
-    print("")
+    # # Exibindo a matriz de relacionamentos (apenas os valores de peso)
+    # print("\nMatriz de Relacionamentos:")
+    # for linha in matriz_relacionamentos:
+    #     print(linha)
+    # print("")
     
     # Verificar se a infraestrutura comporta a quantidade de PODs
     
     if (cpu_total_no>=cpu_total_pod) and (mem_total_no>=mem_total_pod):
         print('-' * 45)
-        print("O algoritmo pode otimizar a alocação...")
-        #melhor_alocacao, melhor_aptidao, todas_aptidoes = algoritmo_genetico(numero_pods, numero_nos, matriz_relacionamentos, tam_populacao, prob_mutacao, num_geracoes)
+        print(f"Melhor alocação encontrada no teste: {teste}")
         
-        melhor_alocacao, melhor_aptidao = algoritmo_genetico(numero_pods, numero_nos, matriz_relacionamentos, tam_populacao, prob_mutacao, num_geracoes)
+        melhor_alocacao, melhor_aptidao, melhores_aptidoes = algoritmo_genetico(numero_pods, numero_nos, matriz_relacionamentos, tam_populacao, prob_mutacao, num_geracoes, teste)
         
+        resultados_aptidoes.append(melhores_aptidoes)
+        
+        if melhor_aptidao > melhor_aptidao_global:
+            melhor_aptidao_global = melhor_aptidao
+            alocacao_global = melhor_alocacao
     else:
         print('-' * 45)
         print("A alocação apropriada é infactível")
 
+
+# --------------- Melhor Aptidão Global --------------- #
+# Identificando o teste que resultou na melhor aptidão global
+print('-' * 45)
+print("Melhor Alocação Global")
+print(f"Melhor Aptidão Global: {melhor_aptidao_global}")
+print(f"Melhor Alocação Global: {alocacao_global}")
+    # Imprimindo a alocação dos pods nos nós
+
+
+
+# --------------- Imprimindo Gráficos --------------- #
+# função para calcular a média e o desvio padrão ao longo do eixo 0, que representa as várias execuções do algoritmo.
+media_aptidoes = np.mean(resultados_aptidoes, axis=0)
+desvio_padrao_aptidoes = np.std(resultados_aptidoes, axis=0)
+
+melhor_aptidao_global = np.max(resultados_aptidoes)
+
+geracoes = range(1, num_geracoes + 1)
+
+# Plota todos os testes
+for i, evolucao in enumerate(resultados_aptidoes):
+    plt.plot(geracoes, evolucao, color='blue', alpha=0.3)
+
+# plt.errorbar(geracoes, media_aptidoes, yerr=desvio_padrao_aptidoes, uplims=True, lolims=True, linewidth = 1, color='red', label='Média das aptidões')
+
+plt.plot(geracoes, media_aptidoes, linewidth = 1, color='red', label='Média das aptidões')
+
+
+plt.axhline(y=melhor_aptidao_global, color='green', linestyle='--', alpha=0.5, label='Melhor Aptidão Global')
+
+plt.xlabel('Geração')
+plt.ylabel('Aptidão')
+plt.title('Evolução da Aptidão ao longo das Gerações')
+plt.legend()
+plt.show()
