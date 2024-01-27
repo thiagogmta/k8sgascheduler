@@ -38,7 +38,7 @@ import numpy as np
 
 # --------------- Variáveis para o GA --------------- #"
 tam_populacao = 100          # Tamaho da população do GA
-num_geracoes = 50            # Numero de gerações do GA
+num_geracoes = 100            # Numero de gerações do GA
 prob_cruzamento = 0.8       # Probabilidade de cruzamento (80%)
 prob_mutacao = 0.2          # Probabilidade de mutação (20%)
 qt_teste = 1                # Qt de vezes que o teste será executado por padrão
@@ -48,7 +48,7 @@ mem_no = 1024               # Qt de Memória de cada Nó
 numero_pods = 20            # Qt de PODs a serem alocados
 cpu_pod = 153               # Qt de CPU de cada POD
 mem_pod = 109               # Qt de Memória de cada POD
-taxa_rel = 50               # Porcentagem de preenchimento da matriz de relacionamentos
+taxa_rel = 10               # Porcentagem de preenchimento da matriz de relacionamentos
 
 print("# --------------- Entre com os Dados Para o GA --------------- #")
 qt = input(f"Entre com a quantidade de vezes que o teste será executado (tecle enter para padrão {qt_teste}): ")
@@ -152,10 +152,10 @@ def func_consumo(alocacao, matriz_nos, matriz_pods, peso):
         soma_porc_mem += media_mem ** peso
         soma_porc_cpu += media_cpu ** peso
         
-        #print(f"Consumo de recursos do nó {matriz_nos[node]['id']}")
-        #print(f"Porcentagem de uso da memória: {media_mem}%")
-        #print(f"Porcentagem de uso da CPU: {media_cpu}%")
-        #print("---")
+        # print(f"Consumo de recursos do nó {matriz_nos[node]['id']}")
+        # print(f"Porcentagem de uso da memória: {media_mem}%")
+        # print(f"Porcentagem de uso da CPU: {media_cpu}%")
+        # print("---")
 
     #print(f"Somatório total de consumo de memória: {soma_porc_mem}")
     #print(f"Somatório total de consumo de CPU: {soma_porc_cpu}")
@@ -215,9 +215,9 @@ def func_infactibilidade(alocacao, matriz_nos, matriz_pods):
         #     infactibilidade_cpu += -1
         
         # Imprimir informações de infactibilidade para o nó atual
-        #print(f"Infactibilidade do nó {matriz_nos[node]['id']}")
-        #print(f"Infactibilidade Memória: {infactibilidade_mem}")
-        #print(f"Infactibilidade CPU: {infactibilidade_cpu}")
+        # print(f"Infactibilidade do nó {matriz_nos[node]['id']}")
+        # print(f"Infactibilidade Memória: {infactibilidade_mem}")
+        # print(f"Infactibilidade CPU: {infactibilidade_cpu}")
         
         # Acumular infactibilidade total para o nó
         somatorio_inf_mem += infactibilidade_mem
@@ -249,22 +249,20 @@ def taxa_relacionamento(alocacao, matriz_nos, matriz_pods, matriz_relacionamento
 # de alocação de memória subtraido a infactibilidade de alocação de cpu.
 def calcular_aptidao(alocacao, matriz_nos, matriz_pods, matriz_relacionamentos):
 
-
-    
-    somatorio_mem, somatorio_cpu = func_consumo(alocacao, matriz_nos, matriz_pods, 1)
+    somatorio_mem, somatorio_cpu = func_consumo(alocacao, matriz_nos, matriz_pods, 2)
     num_nos = func_alocacao(alocacao)
     somatorio_inf_mem, somatorio_inf_cpu = func_infactibilidade(alocacao, matriz_nos, matriz_pods)
     taxa_rel = taxa_relacionamento(alocacao, matriz_nos, matriz_pods, matriz_relacionamentos)
     
     aptidao = (somatorio_mem / num_nos + somatorio_cpu / num_nos) - (somatorio_inf_mem + somatorio_inf_cpu) + taxa_rel
     
-    # print("# --------------------------------------------- #")
-    # print (alocacao)
-    # print (f"Numero de Nós utilizados: {num_nos}")
-    # print(f"Penalidade = {somatorio_inf_cpu+somatorio_inf_mem}")
-    # print(f"Relacionamento = {taxa_rel}")
+    print("# --------------------------------------------- #")
+    print (alocacao)
+    print (f"Numero de Nós utilizados: {num_nos}")
+    print(f"Penalidade = {somatorio_inf_cpu+somatorio_inf_mem}")
+    print(f"Relacionamento = {taxa_rel}")
     
-    # print(f"Aptidão: {aptidao}")
+    print(f"Aptidão: {aptidao}")
     
     return aptidao
 
@@ -323,14 +321,16 @@ def algoritmo_genetico(numero_pods, numero_nos, matriz_relacionamentos, tam_popu
     
     melhores_aptidoes = []
     melhores_alocacoes = []
-    todas_aptidoes = []
-    #historico_aptidoes = []
+    historico_aptidoes = []
     
     for geracao in range(num_geracoes):
         pais_selecionados = selecionar_pais(populacao, matriz_relacionamentos)
         filhos = realizar_cruzamento(pais_selecionados, prob_cruzamento)
         realizar_mutacao(filhos, prob_mutacao, numero_nos)
         populacao = filhos
+        
+        aptidoes_geracao = [calcular_aptidao(alocacao, matriz_nos, matriz_pods, matriz_relacionamentos) for alocacao in populacao]
+        historico_aptidoes.append(aptidoes_geracao)  # Armazenando aptidões da geração atual
         
         for alocacao in populacao:
             aptidao = calcular_aptidao(alocacao, matriz_nos, matriz_pods, matriz_relacionamentos)
@@ -340,8 +340,9 @@ def algoritmo_genetico(numero_pods, numero_nos, matriz_relacionamentos, tam_popu
                 
         melhores_aptidoes.append(melhor_aptidao)
         melhores_alocacoes.append(melhor_alocacao)
-        todas_aptidoes.append([calcular_aptidao(alocacao, matriz_nos, matriz_pods, matriz_relacionamentos) for alocacao in populacao])
-
+        
+        print(f"Melhor Aptidão na Geração {geracao + 1}: {melhor_aptidao}")
+        
     print('-' * 45)
     print(f"Alocação: {melhor_alocacao}")
     print(f"Aptidão: {melhor_aptidao}")
@@ -374,7 +375,17 @@ def algoritmo_genetico(numero_pods, numero_nos, matriz_relacionamentos, tam_popu
     # Imprimindo o somatório do peso do relacionamento dos pods nos nós
     for i, peso in enumerate(pesos_comunicacao):
         print(f"O somatório do peso do relacionamento dos pods do nó {i} é {peso}")
-        
+    
+    # # Flatten da lista de listas para uma lista única de todas as aptidões
+    # todas_aptidoes_flat = [aptidao for geracao in historico_aptidoes for aptidao in geracao]
+    
+    # # Plotando o gráfico da evolução global das aptidões
+    # plt.plot(range(1, len(todas_aptidoes_flat) + 1), todas_aptidoes_flat, color='purple')
+    # plt.xlabel('Iteração')
+    # plt.ylabel('Aptidão')
+    # plt.title('Evolução Global das Aptidões')
+    # plt.show()
+
     return melhor_alocacao, melhor_aptidao, melhores_aptidoes
 
 matriz_nos = gerar_matriz_nos(numero_nos, cpu_no, mem_no)
@@ -438,6 +449,13 @@ for teste in range(qt_teste):
     else:
         print('-' * 45)
         print("A alocação apropriada é infactível")
+
+
+melhor_alocacao, melhor_aptidao, melhores_aptidoes = algoritmo_genetico(numero_pods, numero_nos, matriz_relacionamentos, tam_populacao, prob_mutacao, num_geracoes, teste)
+
+# Imprimindo a evolução das melhores aptidões
+for geracao, aptidao in enumerate(melhores_aptidoes):
+    print(f"Melhor Aptidão na Geração {geracao + 1}: {aptidao}")
 
 
 # --------------- Melhor Aptidão Global --------------- #
