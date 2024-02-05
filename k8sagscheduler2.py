@@ -45,7 +45,7 @@ qt_teste = 1                # Qt de vezes que o teste será executado por padrã
 numero_nos = 3              # Qt padrão de nós
 cpu_no = 2000               # Qt de CPU de cada Nó
 mem_no = 2048               # Qt de Memória de cada Nó
-numero_pods = 20            # Qt de PODs a serem alocados
+numero_pods = 25            # Qt de PODs a serem alocados
 cpu_pod = 50               # Qt de CPU de cada POD
 mem_pod = 64               # Qt de Memória de cada POD
 taxa_rel = 10               # Porcentagem de preenchimento da matriz de relacionamentos
@@ -53,17 +53,17 @@ taxa_rel = 10               # Porcentagem de preenchimento da matriz de relacion
 print("# --------------- Entre com os Dados Para o GA --------------- #")
 qt = input(f"Entre com a quantidade de vezes que o teste será executado (tecle enter para padrão {qt_teste}): ")
 
-n_nos = input(f"Entre com a quantidade de Nós do cluster (tecle enter para padrão {numero_nos}): ")
+#n_nos = input(f"Entre com a quantidade de Nós do cluster (tecle enter para padrão {numero_nos}): ")
 
-n_pods = input(f"Entre com a quantidade de PODs do cluster (tecle enter para padrão {numero_pods}): ")
+# n_pods = input(f"Entre com a quantidade de PODs do cluster (tecle enter para padrão {numero_pods}): ")
 
-# Caso as variáveis não estejam vazias, atualizar os valores
+ # Caso as variáveis não estejam vazias, atualizar os valores
 if qt !='':
-    qt_teste = int(qt)
-if n_nos !='':
-    numero_nos = int(n_nos)
-if n_pods !='':
-    numero_pods = int(n_pods)
+     qt_teste = int(qt)
+# if n_nos !='':
+#     numero_nos = int(n_nos)
+# if n_pods !='':
+#     numero_pods = int(n_pods)
 
 # Função para gerar a matriz dos Nós
 def gerar_matriz_nos(numero_nos, cpu_no, mem_no):
@@ -72,15 +72,36 @@ def gerar_matriz_nos(numero_nos, cpu_no, mem_no):
         for i in range(numero_nos)
     ]
     return matriz_nos
-
-# Função para gerar matrizes de PODs e de Relacionamentos
-def gerar_matrizes(numero_pods, cpu_pod, mem_pod, taxa_rel):
-    # Criar matriz_pod
+        
+def gerar_matrizes(taxa_rel):
     matriz_pods = [
-        {"id": i, "cpu_pod": cpu_pod, "memoria_pod": mem_pod}
-        for i in range(numero_pods)
+        {'id': 0, 'cpu': 50, 'memoria': 64},
+        {'id': 0, 'cpu': 50, 'memoria': 64},
+        {'id': 0, 'cpu': 50, 'memoria': 64},
+        {'id': 0, 'cpu': 50, 'memoria': 64},
+        {'id': 0, 'cpu': 50, 'memoria': 64},
+        {'id': 0, 'cpu': 50, 'memoria': 64},
+        {'id': 0, 'cpu': 50, 'memoria': 64},
+        {'id': 0, 'cpu': 50, 'memoria': 64},
+        {'id': 0, 'cpu': 50, 'memoria': 64},
+        {'id': 0, 'cpu': 50, 'memoria': 64},
+        {'id': 0, 'cpu': 50, 'memoria': 64},
+        {'id': 0, 'cpu': 50, 'memoria': 64},
+        {'id': 0, 'cpu': 50, 'memoria': 64},
+        {'id': 0, 'cpu': 50, 'memoria': 64},
+        {'id': 0, 'cpu': 50, 'memoria': 64},
+        {'id': 0, 'cpu': 100, 'memoria': 128},
+        {'id': 0, 'cpu': 100, 'memoria': 128},
+        {'id': 0, 'cpu': 100, 'memoria': 128},
+        {'id': 0, 'cpu': 100, 'memoria': 128},
+        {'id': 0, 'cpu': 100, 'memoria': 128},
+        {'id': 0, 'cpu': 100, 'memoria': 128},
+        {'id': 0, 'cpu': 100, 'memoria': 128},
+        {'id': 0, 'cpu': 100, 'memoria': 128},
+        {'id': 0, 'cpu': 100, 'memoria': 128},
+        {'id': 0, 'cpu': 100, 'memoria': 128}
     ]
-
+    
     # Criar matriz_relacionamentos
     matriz_relacionamentos = [
         [round(random.uniform(0, 1), 2) if random.uniform(0, 100) < taxa_rel else 0 for _ in range(numero_pods)]
@@ -94,7 +115,7 @@ def gerar_matrizes(numero_pods, cpu_pod, mem_pod, taxa_rel):
 
     return matriz_pods, matriz_relacionamentos
 
-matriz_pods, matriz_relacionamentos = gerar_matrizes(numero_pods, cpu_pod, mem_pod, taxa_rel)
+matriz_pods, matriz_relacionamentos = gerar_matrizes(taxa_rel)
 
 # Iniciando a População
 def iniciar_pop(numero_pods, numero_nos, tam_populacao):

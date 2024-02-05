@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: nginx-deployment
 spec:
-  replicas: 20
+  replicas: 15
   selector:
     matchLabels:
       app: nginx
@@ -23,15 +23,27 @@ spec:
             cpu: "50m"     # CPU solicitada em milicores
             memory: "64Mi" # Memória solicitada em Mebibytes
 ---
-apiVersion: v1
-kind: Service
+apiVersion: apps/v1
+kind: Deployment
 metadata:
-  name: nginx-service
+  name: nginx-deployment-high
 spec:
+  replicas: 10
   selector:
-    app: nginx
-  ports:
-  - protocol: TCP
-    port: 80
-    targetPort: 80
-  type: NodePort
+    matchLabels:
+      app: nginx-high
+  template:
+    metadata:
+      labels:
+        app: nginx-high
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        resources:
+          limits:
+            cpu: "100m"     # CPU limite em milicores
+            memory: "128Mi" # Limite de memória em Mebibytes
+          requests:
+            cpu: "100m"     # CPU solicitada em milicores
+            memory: "128Mi" # Memória solicitada em Mebibytes
