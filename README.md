@@ -92,6 +92,7 @@ Serão criadas três matrizes:
 - Matriz de Relacionamentos
     - A matriz de relacionamentos é uma matriz simétrica
     - Contem o peso do relacionamento entre os pods
+    - A matriz está setada como '0' no algoritmo (por)
     ```python
     matriz_relacionamentos = [
         [0.13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.97, 0, 0, 0, 0, 0, 0],
@@ -158,7 +159,7 @@ mem_no = 2048               # Qt de Memória de cada Nó
 numero_pods = 20            # Qt de PODs a serem alocados
 cpu_pod = 50                # Qt de CPU de cada POD
 mem_pod = 64                # Qt de Memória de cada POD
-taxa_rel = 10               # Porcentagem de preenchimento da matriz de relacionamentos
+taxa_rel = 0               # Porcentagem de preenchimento da matriz de relacionamentos
 ```
 
 **Controle da Infraestrutura**

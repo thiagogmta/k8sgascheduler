@@ -1,0 +1,21 @@
+NAME                                    READY   STATUS    RESTARTS   AGE   IP             NODE                   NOMINATED NODE   READINESS GATES
+nginx-deployment-56999fc74b-294wv       1/1     Running   0          76m   10.244.1.123   k8sgascheduler-oqwgz   <none>           <none>
+nginx-deployment-56999fc74b-b92nc       1/1     Running   0          76m   10.244.1.69    k8sgascheduler-oqwgz   <none>           <none>
+nginx-deployment-56999fc74b-flkcp       1/1     Running   0          76m   10.244.0.111   k8sgascheduler-oqwg9   <none>           <none>
+nginx-deployment-56999fc74b-gk99q       1/1     Running   0          76m   10.244.0.112   k8sgascheduler-oqwg9   <none>           <none>
+nginx-deployment-56999fc74b-h7d42       1/1     Running   0          76m   10.244.0.114   k8sgascheduler-oqwg9   <none>           <none>
+nginx-deployment-56999fc74b-ls4vx       1/1     Running   0          76m   10.244.0.188   k8sgascheduler-oqwen   <none>           <none>
+nginx-deployment-56999fc74b-njsnp       1/1     Running   0          76m   10.244.0.183   k8sgascheduler-oqwen   <none>           <none>
+nginx-deployment-56999fc74b-p5lg9       1/1     Running   0          76m   10.244.1.66    k8sgascheduler-oqwgz   <none>           <none>
+nginx-deployment-56999fc74b-wdzbp       1/1     Running   0          76m   10.244.0.190   k8sgascheduler-oqwen   <none>           <none>
+nginx-deployment-56999fc74b-zvxs9       1/1     Running   0          76m   10.244.0.80    k8sgascheduler-oqwg9   <none>           <none>
+nginx-deployment-high-f67594cb9-2d7sl   0/1     Pending   0          76m   <none>         <none>                 <none>           <none>
+nginx-deployment-high-f67594cb9-dswbn   0/1     Pending   0          76m   <none>         <none>                 <none>           <none>
+nginx-deployment-high-f67594cb9-g7km9   1/1     Running   0          76m   10.244.1.124   k8sgascheduler-oqwgz   <none>           <none>
+nginx-deployment-high-f67594cb9-jn6js   0/1     Pending   0          76m   <none>         <none>                 <none>           <none>
+nginx-deployment-high-f67594cb9-k6p7j   1/1     Running   0          76m   10.244.1.126   k8sgascheduler-oqwgz   <none>           <none>
+nginx-deployment-high-f67594cb9-kmskw   1/1     Running   0          76m   10.244.0.167   k8sgascheduler-oqwen   <none>           <none>
+nginx-deployment-high-f67594cb9-mn98c   1/1     Running   0          76m   10.244.0.138   k8sgascheduler-oqwen   <none>           <none>
+nginx-deployment-high-f67594cb9-w8kgv   1/1     Running   0          76m   10.244.0.69    k8sgascheduler-oqwg9   <none>           <none>
+nginx-deployment-high-f67594cb9-wbhxg   1/1     Running   0          76m   10.244.0.109   k8sgascheduler-oqwg9   <none>           <none>
+nginx-deployment-high-f67594cb9-zlvpk   0/1     Pending   0          76m   <none>         <none>                 <none>           <none>

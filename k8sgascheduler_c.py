@@ -46,7 +46,7 @@ numero_nos = 3              # Qt padrão de nós
 cpu_no = 2000               # Qt de CPU de cada Nó
 mem_no = 2048               # Qt de Memória de cada Nó
 numero_pods = 30            # Qt de PODs a serem alocados
-taxa_rel = 10               # Porcentagem de preenchimento da matriz de relacionamentos
+taxa_rel = 0               # Porcentagem de preenchimento da matriz de relacionamentos
 
 print("# --------------- Entre com os Dados Para o GA --------------- #")
 qt = input(f"Entre com a quantidade de vezes que o teste será executado (tecle enter para padrão {qt_teste}): ")
