@@ -283,7 +283,7 @@ Para este exemplo específico, após ajustar as variáveis no arquivo "gera_matr
 ## Resultados dos testes B e C
 
 ![Evolução das aptidões do teste B](img/resultado_teste02.png)
-Evolução das aptidões do teste B
+- Evolução das aptidões do teste B
 
 ![Evolução das aptidões do teste C](img/resultado_teste03.png)
-Evolução das aptidões do teste C
+- Evolução das aptidões do teste C
