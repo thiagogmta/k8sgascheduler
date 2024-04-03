@@ -1,6 +1,6 @@
 import random
-numero_pods = 20            # Qt de PODs a serem alocados
-taxa_rel = 10               # Porcentagem de preenchimento da matriz de relacionamentos
+numero_pods = 30            # Qt de PODs a serem alocados
+taxa_rel = 0               # Porcentagem de preenchimento da matriz de relacionamentos
 def gerar_matriz(numero_pods, taxa_rel):
 
     # Criar matriz_relacionamentos
@@ -18,5 +18,8 @@ def gerar_matriz(numero_pods, taxa_rel):
 matriz_relacionamentos = gerar_matriz(numero_pods, taxa_rel)
 
 # Imprimir a matriz linha por linha
-for linha in matriz_relacionamentos:
-    print(linha)
+for i, linha in enumerate(matriz_relacionamentos):
+    if i < len(matriz_relacionamentos) - 1:
+        print('[{},],'.format(', '.join(map(str, linha))))
+    else:
+        print('[{}]'.format(', '.join(map(str, linha))))

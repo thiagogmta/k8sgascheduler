@@ -43,7 +43,7 @@ mem_no = 2048               # Qt de Memória de cada Nó
 numero_pods = 20            # Qt de PODs a serem alocados
 cpu_pod = 50               # Qt de CPU de cada POD
 mem_pod = 64               # Qt de Memória de cada POD
-taxa_rel = 0               # Porcentagem de preenchimento da matriz de relacionamentos
+#taxa_rel = 10               # Porcentagem de preenchimento da matriz de relacionamentos
 
 print("# --------------- Entre com os Dados Para o GA --------------- #")
 qt = input(f"Entre com a quantidade de vezes que o teste será executado (tecle enter para padrão {qt_teste}): ")
@@ -66,8 +66,7 @@ def gerar_matriz_nos(numero_nos, cpu_no, mem_no):
     ]
     return matriz_nos
 
-# Função para gerar matrizes de PODs e de Relacionamentos
-def gerar_matrizes(numero_pods, taxa_rel):
+def gerar_matrizes(numero_pods):
     # Criar matriz_pod
     matriz_pods = [
         {"id": i, "cpu_pod": cpu_pod, "memoria_pod": mem_pod}
@@ -76,17 +75,51 @@ def gerar_matrizes(numero_pods, taxa_rel):
 
     # Criar matriz_relacionamentos
     matriz_relacionamentos = [
-        [round(random.uniform(0, 1), 2) if random.uniform(0, 100) < taxa_rel else 0 for _ in range(numero_pods)]
-        for _ in range(numero_pods)
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.22, 0, 0, 0.4, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.77, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0.41, 0, 0.64, 0, 0, 0.13, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0.76, 0.29, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.06, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.49, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0.06, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0.76, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0.29, 0, 0, 0.06, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.07, 0.16, 0, ],
+        [0, 0, 0.41, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0.64, 0, 0, 0, 0, 0, 0, 0, 0, 0.83, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.78, 0.43, 0, ],
+        [0.22, 0.77, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.26, 0, 0, ],
+        [0, 0, 0.13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0.4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0.07, 0, 0, 0, 0.78, 0.26, 0, 0, 0, 0.25, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0.16, 0, 0, 0, 0.43, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0.06, 0.49, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     ]
 
-    # Tornar a matriz_relacionamentos simétrica
-    for i in range(numero_pods):
-        for j in range(i + 1, numero_pods):
-            matriz_relacionamentos[i][j] = matriz_relacionamentos[j][i]
     return matriz_pods, matriz_relacionamentos
 
-matriz_pods, matriz_relacionamentos = gerar_matrizes(numero_pods, taxa_rel)
+# Função para gerar matrizes de PODs e de Relacionamentos
+# def gerar_matrizes(numero_pods, taxa_rel):
+#     # Criar matriz_pod
+#     matriz_pods = [
+#         {"id": i, "cpu_pod": cpu_pod, "memoria_pod": mem_pod}
+#         for i in range(numero_pods)
+#     ]
+#
+#     # Criar matriz_relacionamentos
+#     matriz_relacionamentos = [
+#         [round(random.uniform(0, 1), 2) if random.uniform(0, 100) < taxa_rel else 0 for _ in range(numero_pods)]
+#         for _ in range(numero_pods)
+#     ]
+#
+#     # Tornar a matriz_relacionamentos simétrica
+#     for i in range(numero_pods):
+#         for j in range(i + 1, numero_pods):
+#             matriz_relacionamentos[i][j] = matriz_relacionamentos[j][i]
+#     return matriz_pods, matriz_relacionamentos
+
+matriz_pods, matriz_relacionamentos = gerar_matrizes(numero_pods)
 
 # Iniciando a População
 def iniciar_pop(numero_pods, numero_nos, tam_populacao):
@@ -368,7 +401,7 @@ def algoritmo_genetico(numero_pods, numero_nos, matriz_relacionamentos, tam_popu
     return melhor_alocacao, melhor_aptidao, melhores_aptidoes
 
 matriz_nos = gerar_matriz_nos(numero_nos, cpu_no, mem_no)
-matriz_pods, matriz_relacionamentos = gerar_matrizes(numero_pods, taxa_rel)
+matriz_pods, matriz_relacionamentos = gerar_matrizes(numero_pods)
 print("")
 
 resultados_aptidoes = []

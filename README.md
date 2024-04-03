@@ -1,14 +1,17 @@
 # k8sgaScheduler
+**Algoritmo para alocação inteligente de recursos em cluster kubernetes**
 
-## Genetic Algorithm for 5g K8s Scheduler
-
-Este repositório armazena o protótipo de um algoritmo genético para fomentar o aprimoramento do scheduler padrão do Kubernetes. O objetivo é encontrar a melhor alocação possível de pods, visando maximizar a eficiência do cluster.
+Este repositório armazena o protótipo de um algoritmo genético desenvolvido para aprimorar do scheduler padrão do Kubernetes. O objetivo é encontrar a melhor alocação possível de pods, visando maximizar a eficiência do cluster.
 
 Os Algoritmos Genéticos são uma técnica de otimização inspirada na teoria da evolução biológica. São amplamente utilizados para resolver problemas complexos de otimização, incluindo a alocação eficiente de recursos, e podem ser aplicados à solução deste problema.
 
-Para representar o problema por meio do Algoritmo Genético, a lógica de implementação foi formulada da seguinte maneira: Um cromossomo [0,1,0,2] representa a alocação de 4 pods em 3 nós, e eles estão alocados da seguinte forma: o pod 0 está alocado no nó 0, o pod 1 está alocado no nó 1, o pod 2 está alocado no nó 0 e o pod 3 está alocado no nó 2.
+Para representar o problema por meio do Algoritmo Genético, a lógica de implementação foi formulada da seguinte maneira: Um cromossomo [0,1,0,2] representa a alocação de 4 pods em 3 nós. Eles estão alocados da seguinte forma: o pod 0 está alocado no nó 0, o pod 1 está alocado no nó 1, o pod 2 está alocado no nó 0 e o pod 3 está alocado no nó 2.
 
-Para o ambiente, foram criadas três matrizes. A primeira é a Matriz de nós, que representa os nós que receberão as alocações de pods. Esta matriz possui os campos: id, cpu e memória para cada nó. A segunda é a Matriz de pods, que representa os pods a serem alocados. Esta matriz também possui os campos: id, CPU e memória para cada pod. A terceira é uma matriz simétrica de relacionamentos que representa a taxa de envio e recebimento de informações entre os pods. Essa representação abstrai que dado um valor na matriz simboliza o peso da quantidade de troca de informações entre os pods.
+Para o ambiente, foram criadas três matrizes:
+
+1. **Matriz de nós:** Representa os nós que receberão as alocações de PODs. Esta matriz possui os campos: ID, CPU e memória para cada nó.
+2. **Matriz de PODs:** Representa os PODs a serem alocados. Esta matriz também possui os campos: ID, CPU e memória para cada POD.
+3. **Matriz simétrica de relacionamentos:** Representa a taxa de envio e recebimento de informações entre os PODs. Esta representação abstrai que dado um valor na matriz, simboliza o peso da quantidade de troca de informações entre os PODs.
 
 > **Nota**: O projeto em fase de andamento porém funcional para testes iniciais
 
@@ -16,12 +19,12 @@ Para o ambiente, foram criadas três matrizes. A primeira é a Matriz de nós, q
 
 Foram formulados 3 cenários de testes para avaliação do modelo:
 
-- Baixa capacidade - 20 pods
-  - 20 pods com cpu de 50 milicores e memória de 64B.
-- Capacidade aleatória
-  - 15 pods com cpu de 50 milicores e memória de 64MB.
-  - 10 pods com CPU de 100 milicores e memória de 128MB.
-- Alta capacidade
+1. Baixa capacidade - 20 pods
+   - 20 pods com cpu de 50 milicores e memória de 64B.
+2. Capacidade aleatória - 25 pods
+   - 15 pods com cpu de 50 milicores e memória de 64MB.
+   - 10 pods com CPU de 100 milicores e memória de 128MB.
+3. Alta capacidade - 30 pods
     - 20 pods com CPU de 50 milicores e memória de 64MB.
     - 10 pods com CPU de 100 milicores e memória de 128MB.
 
@@ -56,81 +59,147 @@ Clone este repositório e execute:
 cd k8sgascheduler
 python k8sgascheduler_a.py
 ```
-Ao executar o algoritmo serão solicitadas as informações:
-- Quantidade de vezes que o teste será executado (tecle enter para padrão 10):
-- Quantidade de Nós do cluster (tecle enter para padrão 3):
-- Quantidade de PODs do cluster (tecle enter para padrão 20):
 
-O Fluxo do algoritmo ocorre da seguinte maneira:
+O fluxo do algoritmo ocorre da seguinte maneira:
 
-Serão criadas três matrizes:
-- Matriz dos Nós 
-    - Contem informações dos Nós do Cluster
-    ```python
-    matriz_nos = [
-        {"id": 0, "cpu_no": 2000, "memoria_no": 2048},
-        {"id": 1, "cpu_no": 2000, "memoria_no": 2048},
-        {"id": 2, "cpu_no": 2000, "memoria_no": 2048}
-    ]
-    ```
-- Matriz dos PODs
-    - Contem informações sobre os PODs a serem alocados
-    ```python
-    matriz_pods = [
-        {"id": 0, "cpu": 50, "memoria": 64},
-        {"id": 1, "cpu": 50, "memoria": 64},
-        {"id": 2, "cpu": 50, "memoria": 64},
-        {"id": 3, "cpu": 50, "memoria": 64},
-        {"id": 4, "cpu": 50, "memoria": 64},
-        {"id": 5, "cpu": 50, "memoria": 64},
-        {"id": 6, "cpu": 50, "memoria": 64},
-        {"id": 7, "cpu": 50, "memoria": 64},
-        {"id": 8, "cpu": 50, "memoria": 64},
-        {"id": 9, "cpu": 50, "memoria": 64}
-    ]
-    ```
-- Matriz de Relacionamentos
-    - A matriz de relacionamentos é uma matriz simétrica
-    - Contem o peso do relacionamento entre os pods
-    - A matriz está setada como '0' no algoritmo (por)
-    ```python
-    matriz_relacionamentos = [
-        [0.13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.97, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0.71, 0, 0, 0, 0, 0, 0.53, 0.23, 0, 0, 0, 0, 0, 0.54],
-        [0, 0, 0.16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.83, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.24, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0.66, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0.71, 0, 0, 0, 0.66, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.69, 0, 0, 0.59, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0.69, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.89, 0, 0],
-        [0, 0.53, 0.83, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.07],
-        [0.97, 0.23, 0, 0, 0, 0, 0, 0.59, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0.24, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.69, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.69, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.89, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.55, 0],
-        [0, 0.54, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.07, 0, 0, 0, 0, 0, 0, 0]
-    ]
-    ```
-- O algoritmo busca a melhor alocação possível levando em consideração:
+1. Serão solicitadas as seguintes informações ao usuário:
+   - Quantidade de vezes que o teste será executado (tecle enter para padrão 10):
+   - Quantidade de Nós do cluster (tecle enter para padrão 3):
+   - Quantidade de PODs do cluster (tecle enter para padrão 20):
+
+2. Serão criadas três matrizes:
+   - Matriz dos Nós 
+       - Contem informações dos Nós do Cluster
+       - É criada automaticamente com os valores predefinidos nas variáveis
+       ```python
+       matriz_nos = [
+           {"id": 0, "cpu_no": 2000, "memoria_no": 2048},
+           {"id": 1, "cpu_no": 2000, "memoria_no": 2048},
+           {"id": 2, "cpu_no": 2000, "memoria_no": 2048}
+       ]
+       ```
+   - Matriz dos PODs
+       - Contem informações sobre os PODs a serem alocados
+       - É criada automaticamente com os valores predefinidos nas variáveis
+       ```python
+       matriz_pods = [
+           {"id": 0, "cpu": 50, "memoria": 64},
+           {"id": 1, "cpu": 50, "memoria": 64},
+           {"id": 2, "cpu": 50, "memoria": 64},
+           {"id": 3, "cpu": 50, "memoria": 64},
+           {"id": 4, "cpu": 50, "memoria": 64},
+           {"id": 5, "cpu": 50, "memoria": 64},
+           {"id": 6, "cpu": 50, "memoria": 64},
+           {"id": 7, "cpu": 50, "memoria": 64},
+           {"id": 8, "cpu": 50, "memoria": 64},
+           {"id": 9, "cpu": 50, "memoria": 64},
+           {"id": 10, "cpu": 50, "memoria": 64},
+           {"id": 11, "cpu": 50, "memoria": 64},
+           {"id": 12, "cpu": 50, "memoria": 64},
+           {"id": 13, "cpu": 50, "memoria": 64},
+           {"id": 14, "cpu": 50, "memoria": 64},
+           {"id": 15, "cpu": 50, "memoria": 64},
+           {"id": 16, "cpu": 50, "memoria": 64},
+           {"id": 17, "cpu": 50, "memoria": 64},
+           {"id": 18, "cpu": 50, "memoria": 64},
+           {"id": 19, "cpu": 50, "memoria": 64}
+       ]
+       ```
+   - Matriz de Relacionamentos
+       - A matriz de relacionamentos é uma matriz simétrica
+       - Contem o peso do relacionamento entre os pods
+       - Por padrão é preenchida de forma aleatória em uma proporção de 10/% com valores de 0 a 1
+       ```python
+       matriz_relacionamentos = [
+           [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.22, 0, 0, 0.4, 0, 0, 0,],
+           [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.77, 0, 0, 0, 0, 0, 0,],
+           [0, 0, 0, 0, 0, 0, 0, 0, 0, 0.41, 0, 0.64, 0, 0, 0.13, 0, 0, 0, 0, 0,],
+           [0, 0, 0, 0, 0, 0, 0, 0.76, 0.29, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.06,],
+           [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.49,],
+           [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+           [0, 0, 0, 0, 0, 0, 0, 0, 0.06, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+           [0, 0, 0, 0.76, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+           [0, 0, 0, 0.29, 0, 0, 0.06, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.07, 0.16, 0,],
+           [0, 0, 0.41, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+           [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+           [0, 0, 0.64, 0, 0, 0, 0, 0, 0, 0, 0, 0.83, 0, 0, 0, 0, 0, 0, 0, 0,],
+           [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.78, 0.43, 0,],
+           [0.22, 0.77, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.26, 0, 0,],
+           [0, 0, 0.13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+           [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+           [0.4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+           [0, 0, 0, 0, 0, 0, 0, 0, 0.07, 0, 0, 0, 0.78, 0.26, 0, 0, 0, 0.25, 0, 0,],
+           [0, 0, 0, 0, 0, 0, 0, 0, 0.16, 0, 0, 0, 0.43, 0, 0, 0, 0, 0, 0, 0,],
+           [0, 0, 0, 0.06, 0.49, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+     ]
+       ```
+3. O algoritmo irá buscar a melhor alocação possível levando em consideração:
     1. A taxa de comunicação entre os pods
-        - Sendo interessante alocar no mesmo nós os pods que tenham maior taxa de comunicação
+        - É preferível alocar no mesmo nó os pods que possuem maior taxa de comunicação entre si.
     2. O consumo de CPU
-        - O algoritmo deve otimizar o consumo de CPU dos Nós.
-        - Respeitar os limites de recursos disponíveis no nó.
-        - O algoritmo não deve aceitar alocações infactíveis.
+        - O algoritmo deve otimizar o consumo de CPU dos nós.
+        - Deve respeitar os limites de recursos disponíveis no nó. 
+        - Não deve aceitar alocações que excedam os recursos disponíveis no nó, garantindo que sejam factíveis.
     3. O consumo de memória
-        - Análogo aos requisitos para CPU
+        - Os mesmos requisitos aplicados para a CPU devem ser aplicados para a memória.
 
-> **Note**: O peso do relacionamentos diz respeito ao peso da troca de informações entre um POD i e um POD j que estejam alocados no mesmo Nó.
+> **Note**: O peso do relacionamentos refere-se  à intensidade da troca de informações entre um POD i e um POD j.
+
+## Resultado do algoritmo
+
+Saída do algoritmo com os valores padrões:
+
+```bash
+---------------------------------------------
+Melhor alocação encontrada no teste: 9
+---------------------------------------------
+Alocação: [0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0]
+Aptidão: 6.1045703125
+O POD 0 está alocado no Nó '0'
+O POD 1 está alocado no Nó '0'
+O POD 2 está alocado no Nó '1'
+O POD 3 está alocado no Nó '0'
+O POD 4 está alocado no Nó '0'
+O POD 5 está alocado no Nó '1'
+O POD 6 está alocado no Nó '0'
+O POD 7 está alocado no Nó '0'
+O POD 8 está alocado no Nó '0'
+O POD 9 está alocado no Nó '1'
+O POD 10 está alocado no Nó '1'
+O POD 11 está alocado no Nó '1'
+O POD 12 está alocado no Nó '0'
+O POD 13 está alocado no Nó '0'
+O POD 14 está alocado no Nó '1'
+O POD 15 está alocado no Nó '1'
+O POD 16 está alocado no Nó '0'
+O POD 17 está alocado no Nó '0'
+O POD 18 está alocado no Nó '0'
+O POD 19 está alocado no Nó '0'
+Recursos utilizados Nó 0: Memória = 832 CPU = 650
+Recursos utilizados Nó 1: Memória = 448 CPU = 350
+Recursos utilizados Nó 2: Memória = 0 CPU = 0
+O somatório do peso do relacionamento dos pods do nó 0 é 4.75
+O somatório do peso do relacionamento dos pods do nó 1 é 1.1800000000000002
+O somatório do peso do relacionamento dos pods do nó 2 é 0
+---------------------------------------------
+Melhor Alocação Global
+Melhor Aptidão Global: 6.168632812499999
+Melhor Alocação Global: [0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0]
+```
+O algoritmo irá retornar o melhor indivíduo (melhor alocação) de cada uma das gerações. Ao final o Algoritmo retorna a melhor alocação e a melhor aptidão encontrada.
+
+Além disso, o algoritmo irá gerar um gráfico representando a evolução das alocações até a alocação ótima ser encontrada
+
+- Cada traço azul representa uma evolução do algoritmo em cada rodada que foi executada.
+- A linha pontilhada em verde demarca a melhor aptidão encontrada.
+- A linha em vermelho demarca a média das aptidões.
+
+![Evolução das aptidões do teste A](img/resultado_teste01.png)
+
+Observando o gráfico, podemos notar a evolução das aptidões convergindo para o ótimo global. É possível, dado o contexto, que alocações diferentes resultem em um mesmo valor de aptidão, desde que atendam aos critérios propostos.
 
 ### Calculando a Aptidão de uma alocação:
-Para inserir uma alocação e receber a aptidão da alocação desejada, basta alterar o arquivo aptidao_a.py e informar a alocação desejada na variavel "alocacao".
+Para inserir uma alocação e receber a aptidão da alocação desejada, basta acessar o arquivo calcular\aptidao_a.py e alterar o valor da variável "alocacao", inserindo a alocação desejada. O algoritmo irá retorar a aptidão da alocação.
 
 ```bash
 python calcular\aptidao_a.py
@@ -143,9 +212,9 @@ Aptidão da alocação: 0.07153645833333333
 
 ## Alteração de Parâmetros
 
-**Controle do Algoritmo**
+### 1. Controle do Algoritmo
 
-As variáveis a seguir podem ser alteradas para se obter resultados variados:
+As características de funcionamento do algoritmo genético, bem como as definições de recursos de memória e CPU tanto dos nós quanto dos pods podem ser alteradas diretamente em suas respectivas variáveis no código do algoritmo.
 
 ```python
 tam_populacao = 100         # Tamaho da população do GA
@@ -159,68 +228,62 @@ mem_no = 2048               # Qt de Memória de cada Nó
 numero_pods = 20            # Qt de PODs a serem alocados
 cpu_pod = 50                # Qt de CPU de cada POD
 mem_pod = 64                # Qt de Memória de cada POD
-taxa_rel = 0               # Porcentagem de preenchimento da matriz de relacionamentos
 ```
 
-**Controle da Infraestrutura**
+> **Note**: Ao alterar a quantidade de nós e de pods, é necessário modificar as variáveis numero_nos e numero_pod no código. No entanto, se a quantidade de pods for modificada, é importante ajustar também a matriz de relacionamentos de acordo com a nova quantidade de pods inseridos.
 
-As características de memória e cpu tanto dos Nós quanto dos PODs podem ser alteradas diretamente em suas respectivas matrizes.
+### 2. Alterando a matriz de relacionamentos
 
-> **Note**: Para alteração da quantidade de Nós e de Pods é necessário alterar as variáveis: *numero_nos* e *numero_pod*. Também é necessário adequar a matriz de relacionamentos conforme a nova quantidade de PODs inseridas.
+Através do arquivo "matrizes\gera_matriz_relacionamentos.py", é possível criar uma nova matriz. Se desejar realizar testes alterando a quantidade de pods ou ajustando a taxa de relacionamentos. Para isso basta:
+1. Abrir o arquivo e alterar as variaveis:
+   - numero_pods = 25
+   - taxa_rel = 30
+2. Execute o arquivo para gerar a nova matriz
+3. Copie o conteúdo gerado e cole como valor da matriz "matriz_relacionamentos" no arquivo "k8sgascheduler_a.py"
 
-## Resultado do algoritmo
+Para este exemplo específico, após ajustar as variáveis no arquivo "gera_matriz_relacionamentos.py", o conteúdo gerado poderia seria semelhante a:
 
-Exemplo de utilização:
-```bash
----------------------------------------------
-Melhor alocação encontrada no teste: 9
----------------------------------------------
-Alocação: [1, 1, 1, 1, 1, 1, 1, 1, 2, 0, 0, 1, 1, 0, 1, 1, 2, 1, 1, 1]
-Aptidão: 7.997057291666666
-O POD 0 está alocado no Nó '1'
-O POD 1 está alocado no Nó '1'
-O POD 2 está alocado no Nó '1'
-O POD 3 está alocado no Nó '1'
-O POD 4 está alocado no Nó '1'
-O POD 5 está alocado no Nó '1'
-O POD 6 está alocado no Nó '1'
-O POD 7 está alocado no Nó '1'
-O POD 8 está alocado no Nó '2'
-O POD 9 está alocado no Nó '0'
-O POD 10 está alocado no Nó '0'
-O POD 11 está alocado no Nó '1'
-O POD 12 está alocado no Nó '1'
-O POD 13 está alocado no Nó '0'
-O POD 14 está alocado no Nó '1'
-O POD 15 está alocado no Nó '1'
-O POD 16 está alocado no Nó '2'
-O POD 17 está alocado no Nó '1'
-O POD 18 está alocado no Nó '1'
-O POD 19 está alocado no Nó '1'
-Recursos utilizados Nó 0: Memória = 192 CPU = 150
-Recursos utilizados Nó 1: Memória = 960 CPU = 750
-Recursos utilizados Nó 2: Memória = 128 CPU = 100
-O somatório do peso do relacionamento dos pods do nó 0 é 0
-O somatório do peso do relacionamento dos pods do nó 1 é 7.869999999999999
-O somatório do peso do relacionamento dos pods do nó 2 é 0
----------------------------------------------
-Melhor Alocação Global
-Melhor Aptidão Global: 8.3098828125
-Melhor Alocação Global: [1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-```
-O algoritmo irá retornar o melhor indivíduo (melhor alocação) de cada uma das gerações. Ao final o Algoritmo retorna a melhor alocação e a melhor aptidão encontrada.
+```python
+    matriz_relacionamentos = [
+        [0, 0, 0, 0, 0, 0, 0.17, 0, 0.67, 0, 0.1, 0, 0.21, 0.7, 0.11, 0, 0, 0.13, 0.54, 0, 0, 0.68,],
+        [0, 0.04, 0, 0.72, 0, 0, 0, 0, 0.13, 0.17, 0, 0.4, 0, 0.16, 0, 0, 0.06, 0.66, 0, 0.52, 0.75, 0,],
+        [0, 0, 0, 0.57, 0.07, 0, 0.02, 0, 0, 0, 0, 0.13, 0.99, 0.94, 0.42, 0.82, 0, 0.28, 0.73, 0, 0.94, 0,],
+        [0, 0.72, 0.57, 0, 0, 0.24, 0.58, 0, 0, 0.9, 0, 0, 0, 0, 0.37, 0.57, 0, 0, 0, 0.65, 0, 0,],
+        [0, 0, 0.07, 0, 0, 0.82, 0, 0, 0.82, 0.29, 0, 0, 0, 0, 0.31, 0.71, 0, 0, 0, 0.38, 0.77, 0,],
+        [0, 0, 0, 0.24, 0.82, 0, 0, 0.05, 0, 0, 0.08, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0.17, 0, 0.02, 0.58, 0, 0, 0, 0.52, 0, 0, 0.78, 0, 0, 0, 0.64, 0, 0, 0, 0, 0.29, 0, 0.53,],
+        [0, 0, 0, 0, 0, 0.05, 0.52, 0, 0, 0.23, 0.37, 0, 0, 0, 0, 0, 0, 0, 0.01, 0, 0, 0,],
+        [0.67, 0.13, 0, 0, 0.82, 0, 0, 0, 0.48, 0, 0.2, 0, 0.25, 0, 0.66, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0.17, 0, 0.9, 0.29, 0, 0, 0.23, 0, 0, 0, 0.73, 0, 0, 0.28, 0, 0, 0, 0, 0, 0, 0,],
+        [0.1, 0, 0, 0, 0, 0.08, 0.78, 0.37, 0.2, 0, 0, 0.2, 0.33, 0.11, 0.43, 0, 0, 0, 0, 0.91, 0.3, 0.64,],
+        [0, 0.4, 0.13, 0, 0, 0, 0, 0, 0, 0.73, 0.2, 0, 0, 0, 0, 0.38, 0, 0, 0, 0, 0, 0.01,],
+        [0.21, 0, 0.99, 0, 0, 0, 0, 0, 0.25, 0, 0.33, 0, 0, 0.09, 0, 0, 0, 0, 0, 0, 0.32, 0,],
+        [0.7, 0.16, 0.94, 0, 0, 0, 0, 0, 0, 0, 0.11, 0, 0.09, 0, 0.56, 0, 0, 0.26, 0.18, 0, 0, 0.26,],
+        [0.11, 0, 0.42, 0.37, 0.31, 0, 0.64, 0, 0.66, 0.28, 0.43, 0, 0, 0.56, 0.02, 0.73, 0, 0, 0, 0, 0, 0.46,],
+        [0, 0, 0.82, 0.57, 0.71, 0, 0, 0, 0, 0, 0, 0.38, 0, 0, 0.73, 0, 0.38, 0, 0, 0, 0, 0,],
+        [0, 0.06, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.38, 0, 0.28, 0, 0, 0, 0.99,],
+        [0.13, 0.66, 0.28, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.26, 0, 0, 0.28, 0, 0, 0.58, 0.06, 0,],
+        [0.54, 0, 0.73, 0, 0, 0, 0, 0.01, 0, 0, 0, 0, 0, 0.18, 0, 0, 0, 0, 0, 0, 0, 0,],
+        [0, 0.52, 0, 0.65, 0.38, 0, 0.29, 0, 0, 0, 0.91, 0, 0, 0, 0, 0, 0, 0.58, 0, 0, 0, 0.88,],
+        [0, 0.75, 0.94, 0, 0.77, 0, 0, 0, 0, 0, 0.3, 0, 0.32, 0, 0, 0, 0, 0.06, 0, 0, 0.29, 0.91,],
+        [0.68, 0, 0, 0, 0, 0, 0.53, 0, 0, 0, 0.64, 0.01, 0, 0.26, 0.46, 0, 0.99, 0, 0, 0.88, 0.91, 0]
+    ]
+````
 
-O Algoritmo também irá retornar um grafico representando a evolução das alocações até a alocação ótmia encontrada. O grafico a seguir apresenta o concatenado de 4 testes que foram executados.
-
-- Cada traço azul representa uma evolução do algoritmo em cada rodada q foi executado
-- A linha pontilhada em verde demarca a melhor aptidão encontrada
-- A linha em vermelho demarca a média das aptidões.
-
-![Melhor alocação encontrada](img/resultado_teste01.png)
-
-Observando o gráfico podemos observar a evolução das aptidões convergência o ótimo global. É possível, dado o contexto, que alocações diferentes resultem em um mesmo valor de aptidão contanto que atenda os critérios propostos.
+> **Nota**: 
+> 1. Ao alterar a quantidade de pods (variavel numero_pods) uma nova matriz com a quantidade de pods correspondente deve ser gerada.
+> 2. A matriz de relacionamentos é preenchia de forma aleatória.
 
 ## Observações 
 
-Para os Testes k8sgascheduler_b e k8sgascheduler_c, o algoritmo requer apenas a especificação da quantidade de vezes que será executado. Para alterar os valores e quantidades dos pods e nós, essas informações devem ser inseridas nas variáveis e matrizes do algoritmo.
+- Para os Testes k8sgascheduler_b e k8sgascheduler_c, o algoritmo requer apenas a especificação da quantidade de vezes que será executado. Para alterar os valores e quantidades dos pods e nós, essas informações devem ser inseridas nas variáveis e matrizes do algoritmo.
 
+- No diretório "matrizes" estão registradas as matrizes de relacionamento geradas para cada um dos testes
+
+## Resultados dos testes B e C
+
+![Evolução das aptidões do teste B](img/resultado_teste02.png)
+Evolução das aptidões do teste B
+
+![Evolução das aptidões do teste C](img/resultado_teste03.png)
+Evolução das aptidões do teste C

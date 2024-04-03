@@ -46,7 +46,7 @@ numero_nos = 3              # Qt padrão de nós
 cpu_no = 2000               # Qt de CPU de cada Nó
 mem_no = 2048               # Qt de Memória de cada Nó
 numero_pods = 30            # Qt de PODs a serem alocados
-taxa_rel = 0               # Porcentagem de preenchimento da matriz de relacionamentos
+#taxa_rel = 10               # Porcentagem de preenchimento da matriz de relacionamentos
 
 print("# --------------- Entre com os Dados Para o GA --------------- #")
 qt = input(f"Entre com a quantidade de vezes que o teste será executado (tecle enter para padrão {qt_teste}): ")
@@ -60,7 +60,7 @@ def gerar_matriz_nos(numero_nos, cpu_no, mem_no):
     return matriz_nos
 
 # Função para gerar matrizes de PODs e de Relacionamentos
-def gerar_matrizes(numero_pods, taxa_rel):
+def gerar_matrizes():
     # Criar matriz_pod
     matriz_pods = [
         {'id': 0, 'cpu_pod': 50, 'memoria_pod': 64},
@@ -97,18 +97,50 @@ def gerar_matrizes(numero_pods, taxa_rel):
 
     # Criar matriz_relacionamentos
     matriz_relacionamentos = [
-        [round(random.uniform(0, 1), 2) if random.uniform(0, 100) < taxa_rel else 0 for _ in range(numero_pods)]
-        for _ in range(numero_pods)
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.84, 0, 0, 0, 0, 0, ],
+        [0, 0, 0.22, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.54, 0, 0, 0, 0, ],
+        [0, 0.22, 0.93, 0, 0.48, 0, 0, 0, 0, 0.09, 0.49, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.3, 0, ],
+        [0, 0, 0, 0, 0.97, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.99, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0.48, 0.97, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.59, 0, 0, 0.25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0.39, 0.32, 0.89, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.06, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.22, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.65, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.95, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0.39, 0, 0, 0, 0, 0.67, 0, 0, 0, 0.98, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0.09, 0, 0, 0.32, 0, 0, 0, 0, 0, 0, 0.11, 0, 0, 0, 0, 0, 0, 0, 0.64, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0.49, 0, 0, 0.89, 0, 0, 0.67, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.41, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.17, 0, 0, 0, 0, 0, 0, 0, 0, 0.3, 0, 0, 0, 0, 0, 0.69, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0.11, 0, 0, 0, 0, 0, 0.49, 0, 0.95, 0, 0, 0, 0, 0, 0, 0.64, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.17, 0, 0.66, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.44, 0.98, ],
+        [0, 0, 0, 0, 0, 0, 0, 0.65, 0.98, 0, 0, 0, 0, 0, 0, 0, 0, 0.33, 0, 0, 0, 0, 0, 0.92, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.49, 0, 0, 0, 0.4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.97, 0, ],
+        [0, 0, 0, 0.99, 0.59, 0, 0.06, 0, 0, 0, 0, 0, 0, 0, 0, 0.4, 0.91, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.95, 0, 0.33, 0, 0, 0, 0, 0, 0, 0.76, 0, 0.85, 0.44, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.41, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.97, 0, 0, 0, 0, ],
+        [0, 0, 0, 0, 0.25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0.64, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.09, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.76, 0, 0, 0, 0, 0, 0.44, 0, 0, 0, 0, 0.58, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.92, 0, 0, 0.85, 0, 0, 0, 0.44, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0.84, 0, 0, 0, 0, 0, 0, 0.95, 0, 0, 0, 0, 0.64, 0, 0, 0, 0, 0.44, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0.54, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.97, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.22, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0.22, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.09, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0.3, 0, 0, 0, 0, 0, 0, 0, 0, 0.69, 0, 0.44, 0, 0.97, 0, 0, 0, 0, 0, 0.58, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.98, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     ]
-
-    # Tornar a matriz_relacionamentos simétrica
-    for i in range(numero_pods):
-        for j in range(i + 1, numero_pods):
-            matriz_relacionamentos[i][j] = matriz_relacionamentos[j][i]
+    # matriz_relacionamentos = [
+    #     [round(random.uniform(0, 1), 2) if random.uniform(0, 100) < taxa_rel else 0 for _ in range(numero_pods)]
+    #     for _ in range(numero_pods)
+    # ]
+    #
+    # # Tornar a matriz_relacionamentos simétrica
+    # for i in range(numero_pods):
+    #     for j in range(i + 1, numero_pods):
+    #         matriz_relacionamentos[i][j] = matriz_relacionamentos[j][i]
 
     return matriz_pods, matriz_relacionamentos
 
-matriz_pods, matriz_relacionamentos = gerar_matrizes(numero_pods, taxa_rel)
+matriz_pods, matriz_relacionamentos = gerar_matrizes()
 
 # Iniciando a População
 def iniciar_pop(numero_pods, numero_nos, tam_populacao):
@@ -390,7 +422,7 @@ def algoritmo_genetico(numero_pods, numero_nos, matriz_relacionamentos, tam_popu
     return melhor_alocacao, melhor_aptidao, melhores_aptidoes
 
 matriz_nos = gerar_matriz_nos(numero_nos, cpu_no, mem_no)
-matriz_pods, matriz_relacionamentos = gerar_matrizes(numero_pods, taxa_rel)
+matriz_pods, matriz_relacionamentos = gerar_matrizes()
 print("")
 
 resultados_aptidoes =[]
