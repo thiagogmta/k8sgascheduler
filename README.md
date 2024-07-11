@@ -1,11 +1,13 @@
 # k8sgaScheduler
 **Algoritmo para alocação inteligente de recursos em cluster kubernetes**
 
-Este repositório armazena o protótipo de um algoritmo genético desenvolvido para aprimorar do scheduler padrão do Kubernetes. O objetivo é encontrar a melhor alocação possível de pods, visando maximizar a eficiência do cluster.
+O Kubernetes é uma plataforma de código aberto amplamente utilizada para gerenciar cargas de trabalho e serviços em contêineres, promovendo automação, escalabilidade e manutenção. No entanto, a eficiência na alocação de recursos é crucial para maximizar o desempenho e a economia de custos. Este projeto apresenta o K8sGAScheduler, um algoritmo inteligente desenvolvido para otimizar a alocação de recursos em clusters Kubernetes, oferecendo uma solução avançada para melhorar a distribuição de cargas de trabalho e garantir um uso mais eficiente dos recursos disponíveis.
 
-Os Algoritmos Genéticos são uma técnica de otimização inspirada na teoria da evolução biológica. São amplamente utilizados para resolver problemas complexos de otimização, incluindo a alocação eficiente de recursos, e podem ser aplicados à solução deste problema.
+- O objetivo é encontrar a melhor alocação possível de pods, visando maximizar a eficiência do cluster.
 
-Para representar o problema por meio do Algoritmo Genético, a lógica de implementação foi formulada da seguinte maneira: Um cromossomo [0,1,0,2] representa a alocação de 4 pods em 3 nós. Eles estão alocados da seguinte forma: o pod 0 está alocado no nó 0, o pod 1 está alocado no nó 1, o pod 2 está alocado no nó 0 e o pod 3 está alocado no nó 2.
+É importante notar que este código é uma avaliação do modelo matemático proposto para o K8sGAScheduler e, nesta fase, não é executável diretamente dentro do Kubernetes. A finalidade deste projeto é validar a formulação matemática e o algoritmo de alocação.
+
+O problema foi representado por meio de um Algoritmo Genético, uma técnica de otimização inspirada na teoria da evolução biológica. Amplamente utilizados para resolver problemas complexos de otimização, incluindo a alocação eficiente de recursos, sendo aplicáveis à solução deste problema. A lógica de implementação foi formulada da seguinte maneira: um cromossomo [0,1,0,2] representa a alocação de quatro pods em três nós, onde o pod 0 está alocado no nó 0, o pod 1 no nó 1, o pod 2 no nó 0 e o pod 3 no nó 2.
 
 Para o ambiente, foram criadas três matrizes:
 

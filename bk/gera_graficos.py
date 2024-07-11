@@ -14,7 +14,7 @@ nodos = ['Nó 1', 'Nó 2', 'Nó 3']
 recursos_totais = [100, 100, 100]
 
 # Porcentagem de recursos consumidos em cada nó (50%)
-consumo_recursos = [105, 45, 0]
+consumo_recursos = [110, 40, 0]
 
 # Plot
 

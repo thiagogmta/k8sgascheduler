@@ -5,7 +5,7 @@ Created on Fri Jun  9 10:57:55 2023
 @author: Thiago Guimarães
 
 Fluxo do algoritmo genético:
-
+    
     1 - Definição da representação dos cromossomos
         - Cada cromossomo representa uma solução candidata que é a alocação de PODs em Nós (Gene: 1 sim; 0 não)
     2 - Iníciar a população
@@ -27,6 +27,11 @@ Fluxo do algoritmo genético:
     10 - Retorna com a melhor solução encontrada
 """
 
+# Dados para receber:
+#   Quantas vezes deseja executar o GA?
+#   Salvar em arquivo o resultado dos testes
+
+
 import random
 import matplotlib.pyplot as plt
 import numpy as np
@@ -40,23 +45,11 @@ qt_teste = 10                # Qt de vezes que o teste será executado por padr�
 numero_nos = 3              # Qt padrão de nós
 cpu_no = 2000               # Qt de CPU de cada Nó
 mem_no = 2048               # Qt de Memória de cada Nó
-numero_pods = 20            # Qt de PODs a serem alocados
-cpu_pod = 50               # Qt de CPU de cada POD
-mem_pod = 64               # Qt de Memória de cada POD
+numero_pods = 30            # Qt de PODs a serem alocados
 #taxa_rel = 10               # Porcentagem de preenchimento da matriz de relacionamentos
 
 print("# --------------- Entre com os Dados Para o GA --------------- #")
 qt = input(f"Entre com a quantidade de vezes que o teste será executado (tecle enter para padrão {qt_teste}): ")
-n_nos = input(f"Entre com a quantidade de Nós do cluster (tecle enter para padrão {numero_nos}): ")
-n_pods = input(f"Entre com a quantidade de PODs do cluster (tecle enter para padrão {numero_pods}): ")
-
-# Caso as variáveis não estejam vazias, atualizar os valores
-if qt !='':
-    qt_teste = int(qt)
-if n_nos !='':
-    numero_nos = int(n_nos)
-if n_pods !='':
-    numero_pods = int(n_pods)
 
 # Função para gerar a matriz dos Nós
 def gerar_matriz_nos(numero_nos, cpu_no, mem_no):
@@ -66,60 +59,88 @@ def gerar_matriz_nos(numero_nos, cpu_no, mem_no):
     ]
     return matriz_nos
 
-def gerar_matrizes(numero_pods):
+# Função para gerar matrizes de PODs e de Relacionamentos
+def gerar_matrizes():
     # Criar matriz_pod
     matriz_pods = [
-        {"id": i, "cpu_pod": cpu_pod, "memoria_pod": mem_pod}
-        for i in range(numero_pods)
+        {'id': 0, 'cpu_pod': 50, 'memoria_pod': 64},
+        {'id': 1, 'cpu_pod': 50, 'memoria_pod': 64},
+        {'id': 2, 'cpu_pod': 50, 'memoria_pod': 64},
+        {'id': 3, 'cpu_pod': 50, 'memoria_pod': 64},
+        {'id': 4, 'cpu_pod': 50, 'memoria_pod': 64},
+        {'id': 5, 'cpu_pod': 50, 'memoria_pod': 64},
+        {'id': 6, 'cpu_pod': 50, 'memoria_pod': 64},
+        {'id': 7, 'cpu_pod': 50, 'memoria_pod': 64},
+        {'id': 8, 'cpu_pod': 50, 'memoria_pod': 64},
+        {'id': 9, 'cpu_pod': 50, 'memoria_pod': 64},
+        {'id': 10, 'cpu_pod': 50, 'memoria_pod': 64},
+        {'id': 11, 'cpu_pod': 50, 'memoria_pod': 64},
+        {'id': 12, 'cpu_pod': 50, 'memoria_pod': 64},
+        {'id': 13, 'cpu_pod': 50, 'memoria_pod': 64},
+        {'id': 14, 'cpu_pod': 50, 'memoria_pod': 64},
+        {'id': 15, 'cpu_pod': 50, 'memoria_pod': 64},
+        {'id': 16, 'cpu_pod': 50, 'memoria_pod': 64},
+        {'id': 17, 'cpu_pod': 50, 'memoria_pod': 64},
+        {'id': 18, 'cpu_pod': 50, 'memoria_pod': 64},
+        {'id': 19, 'cpu_pod': 50, 'memoria_pod': 64},
+        {'id': 20, 'cpu_pod': 100, 'memoria_pod': 128},
+        {'id': 21, 'cpu_pod': 100, 'memoria_pod': 128},
+        {'id': 22, 'cpu_pod': 100, 'memoria_pod': 128},
+        {'id': 23, 'cpu_pod': 100, 'memoria_pod': 128},
+        {'id': 24, 'cpu_pod': 100, 'memoria_pod': 128},
+        {'id': 25, 'cpu_pod': 100, 'memoria_pod': 128},
+        {'id': 26, 'cpu_pod': 100, 'memoria_pod': 128},
+        {'id': 27, 'cpu_pod': 100, 'memoria_pod': 128},
+        {'id': 28, 'cpu_pod': 100, 'memoria_pod': 128},
+        {'id': 29, 'cpu_pod': 100, 'memoria_pod': 128}
     ]
 
     # Criar matriz_relacionamentos
     matriz_relacionamentos = [
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     ]
+    # matriz_relacionamentos = [
+    #     [round(random.uniform(0, 1), 2) if random.uniform(0, 100) < taxa_rel else 0 for _ in range(numero_pods)]
+    #     for _ in range(numero_pods)
+    # ]
+    #
+    # # Tornar a matriz_relacionamentos simétrica
+    # for i in range(numero_pods):
+    #     for j in range(i + 1, numero_pods):
+    #         matriz_relacionamentos[i][j] = matriz_relacionamentos[j][i]
 
     return matriz_pods, matriz_relacionamentos
 
-# Função para gerar matrizes de PODs e de Relacionamentos
-# def gerar_matrizes(numero_pods, taxa_rel):
-#     # Criar matriz_pod
-#     matriz_pods = [
-#         {"id": i, "cpu_pod": cpu_pod, "memoria_pod": mem_pod}
-#         for i in range(numero_pods)
-#     ]
-#
-#     # Criar matriz_relacionamentos
-#     matriz_relacionamentos = [
-#         [round(random.uniform(0, 1), 2) if random.uniform(0, 100) < taxa_rel else 0 for _ in range(numero_pods)]
-#         for _ in range(numero_pods)
-#     ]
-#
-#     # Tornar a matriz_relacionamentos simétrica
-#     for i in range(numero_pods):
-#         for j in range(i + 1, numero_pods):
-#             matriz_relacionamentos[i][j] = matriz_relacionamentos[j][i]
-#     return matriz_pods, matriz_relacionamentos
-
-matriz_pods, matriz_relacionamentos = gerar_matrizes(numero_pods)
+matriz_pods, matriz_relacionamentos = gerar_matrizes()
 
 # Iniciando a População
 def iniciar_pop(numero_pods, numero_nos, tam_populacao):
@@ -148,7 +169,7 @@ def func_alocacao(alocacao):
 # 1. Itera sobre cada Nó da matriz de nós
 # 2. Itera sobre o vetor de alocação verificando se cada pod está alocado no Nó da iteração anterior.
 # 3. Caso o POD esteja alocado realiza o somatório da quantidade de memória e cpu demandada
-# 4. Retorna o somatório
+# 4. Retorna o somatório 
 def func_consumo(alocacao, matriz_nos, matriz_pods, peso):
     soma_porc_mem = 0
     soma_porc_cpu = 0
@@ -176,14 +197,14 @@ def func_consumo(alocacao, matriz_nos, matriz_pods, peso):
         # Soma as porcentagens calculadas aos somatórios gerais
         soma_porc_mem += media_mem ** peso
         soma_porc_cpu += media_cpu ** peso
+        
+        #print(f"Consumo de recursos do nó {matriz_nos[node]['id']}")
+        #print(f"Porcentagem de uso da memória: {media_mem}%")
+        #print(f"Porcentagem de uso da CPU: {media_cpu}%")
+        #print("---")
 
-        # print(f"Consumo de recursos do nó {matriz_nos[node]['id']}")
-        # print(f"Porcentagem de uso da memória: {media_mem}%")
-        # print(f"Porcentagem de uso da CPU: {media_cpu}%")
-        # print("---")
-
-    # print(f"Somatório total de consumo de memória: {soma_porc_mem}")
-    # print(f"Somatório total de consumo de CPU: {soma_porc_cpu}")
+    #print(f"Somatório total de consumo de memória: {soma_porc_mem}")
+    #print(f"Somatório total de consumo de CPU: {soma_porc_cpu}")
 
     return soma_porc_mem, soma_porc_cpu
 
@@ -191,7 +212,7 @@ def func_consumo(alocacao, matriz_nos, matriz_pods, peso):
 # Descrição:
 # Calcula a infactibilidade na alocação (se a alocação é viável ou não)
 # É uma medida do quão próximo o Nó está de ficar sem recursos.
-# I(x) = -1 ou 0
+# I(x) = -1 ou 0 
 # -1 -> se i(x) > 1 a alocação não é viável (pois excede a capacidade do nó 0.99%)
 # 0 -> Caso Contrário
 # 1. Itera sobre cada Nó da matriz de nós
@@ -204,7 +225,7 @@ def func_consumo(alocacao, matriz_nos, matriz_pods, peso):
 def func_infactibilidade(alocacao, matriz_nos, matriz_pods):
     somatorio_inf_mem = 0
     somatorio_inf_cpu = 0
-
+    
     # Itera sobre cada nó utilizado na alocação
     for node in range(len(matriz_nos)):
         infactibilidade_mem = 0
@@ -214,7 +235,7 @@ def func_infactibilidade(alocacao, matriz_nos, matriz_pods):
 
         # Itera sobre cada POD alocado e verificar se pertence ao nó atual
         for pod, alocado_no in enumerate(alocacao):
-
+            
             if alocado_no == node:
                 somatorio_mem += matriz_pods[pod]['memoria_pod']
                 somatorio_cpu += matriz_pods[pod]['cpu_pod']
@@ -223,31 +244,31 @@ def func_infactibilidade(alocacao, matriz_nos, matriz_pods):
             infactibilidade_mem += 0
         else:
             infactibilidade_mem += (somatorio_mem / matriz_nos[node]['memoria_no'])
-
+            
         if (somatorio_cpu / matriz_nos[node]['cpu_no']) <= 1:
             infactibilidade_cpu += 0
         else:
             infactibilidade_cpu += (somatorio_cpu / matriz_nos[node]['cpu_no'])
-
+        
         # if (somatorio_mem /  matriz_nos[node]['memoria_no']) <= 1:
         #     infactibilidade_mem += 0
         # else:
         #     infactibilidade_mem += -1
-
+            
         # if (somatorio_cpu /  matriz_nos[node]['cpu_no']) <= 1:
         #     infactibilidade_cpu += 0
         # else:
         #     infactibilidade_cpu += -1
-
+        
         # Imprimir informações de infactibilidade para o nó atual
-        # print(f"Infactibilidade do nó {matriz_nos[node]['id']}")
-        # print(f"Infactibilidade Memória: {infactibilidade_mem}")
-        # print(f"Infactibilidade CPU: {infactibilidade_cpu}")
-
+        #print(f"Infactibilidade do nó {matriz_nos[node]['id']}")
+        #print(f"Infactibilidade Memória: {infactibilidade_mem}")
+        #print(f"Infactibilidade CPU: {infactibilidade_cpu}")
+        
         # Acumular infactibilidade total para o nó
         somatorio_inf_mem += infactibilidade_mem
         somatorio_inf_cpu += infactibilidade_cpu
-
+        
     # Retornar a infactibilidade total
     return somatorio_inf_mem, somatorio_inf_cpu
 
@@ -255,45 +276,47 @@ def func_infactibilidade(alocacao, matriz_nos, matriz_pods):
 def taxa_relacionamento(alocacao, matriz_nos, matriz_pods, matriz_relacionamentos):
     pesos_comunicacao = [0] * len(matriz_nos)
     for i, node in enumerate(alocacao):
-        for j in range(i + 1, len(alocacao)):
-            if alocacao[j] == node:
-                pod1 = i
-                pod2 = j
-                peso = matriz_relacionamentos[pod1][pod2]
-                pesos_comunicacao[node] += peso
+            for j in range(i + 1, len(alocacao)):
+                if alocacao[j] == node:
+                    pod1 = i
+                    pod2 = j
+                    peso = matriz_relacionamentos[pod1][pod2]
+                    pesos_comunicacao[node] += peso
     soma_pesos = sum(pesos_comunicacao)
     return soma_pesos
 
 # --------------- F(x) Função de Aptidão
 # Descrição:
 # Avalia cada alocação e retorna sua aptidão.
-# f(x) = O somatório da porcentagem de ocupação da memória de todos os nós dividido
-# pela quantidade de nós utilizados na alocação somado ao somatório da porcentagem
-# de ocupação da cpu de todos os nós dividido pela quantidade de nós utilizados
-# na alocação somado a taxa de relacionamento entre os nós subtraido a infactibilidade
+# f(x) = O somatório da porcentagem de ocupação da memória de todos os nós dividido 
+# pela quantidade de nós utilizados na alocação somado ao somatório da porcentagem 
+# de ocupação da cpu de todos os nós dividido pela quantidade de nós utilizados 
+# na alocação somado a taxa de relacionamento entre os nós subtraido a infactibilidade 
 # de alocação de memória subtraido a infactibilidade de alocação de cpu.
 def calcular_aptidao(alocacao, matriz_nos, matriz_pods, matriz_relacionamentos):
+    
     somatorio_mem, somatorio_cpu = func_consumo(alocacao, matriz_nos, matriz_pods, 2)
     num_nos = func_alocacao(alocacao)
     somatorio_inf_mem, somatorio_inf_cpu = func_infactibilidade(alocacao, matriz_nos, matriz_pods)
     taxa_rel = taxa_relacionamento(alocacao, matriz_nos, matriz_pods, matriz_relacionamentos)
-
+    
     aptidao = (somatorio_mem / num_nos + somatorio_cpu / num_nos) - (somatorio_inf_mem + somatorio_inf_cpu) + taxa_rel
-
+    
     # print("# --------------------------------------------- #")
     # print (alocacao)
     # print (f"Numero de Nós utilizados: {num_nos}")
     # print(f"Penalidade = {somatorio_inf_cpu+somatorio_inf_mem}")
     # print(f"Relacionamento = {taxa_rel}")
+    
     # print(f"Aptidão: {aptidao}")
+    
     return aptidao
 
 # Seleciona os pais para realizar o cruzamento e gerar novos filhos (método roleta)
 def selecionar_pais(populacao, matriz_relacionamentos):
-    pais_selecionados = []
-    soma_aptidao = sum(
-        calcular_aptidao(alocacao, matriz_nos, matriz_pods, matriz_relacionamentos) for alocacao in populacao)
-    for _ in range(len(populacao)):
+    pais_selecionados=[]
+    soma_aptidao = sum(calcular_aptidao(alocacao, matriz_nos, matriz_pods, matriz_relacionamentos) for alocacao in populacao)
+    for _ in range (len(populacao)):
         pai = None
         valor_aleatorio = random.uniform(0, soma_aptidao)
         acumulado = 0
@@ -304,7 +327,7 @@ def selecionar_pais(populacao, matriz_relacionamentos):
                 break
         pais_selecionados.append(pai)
     return pais_selecionados
-
+        
 # Realiza o cruzamento dos pais selecionados para que gere filhos com o gene de ambos
 def realizar_cruzamento(pais_selecionados, prob_cruzamento):
     filhos = []
@@ -336,54 +359,52 @@ def realizar_mutacao(filhos, prob_mutacao, numero_nos):
                 if random.random() < prob_mutacao:
                     filhos[i][j] = random.randint(0, numero_nos - 1)
 
-def algoritmo_genetico(numero_pods, numero_nos, matriz_relacionamentos, tam_populacao, prob_mutacao, num_geracoes,
-                       teste):
+def algoritmo_genetico(numero_pods, numero_nos, matriz_relacionamentos, tam_populacao, prob_mutacao, num_geracoes, teste):
     populacao = iniciar_pop(numero_pods, numero_nos, tam_populacao)
-
+    
     melhor_alocacao = None
     melhor_aptidao = float('-inf')  # Inicializando com o menor valor possível
-
+    
     melhores_aptidoes = []
     melhores_alocacoes = []
     todas_aptidoes = []
-    # historico_aptidoes = []
-
+    #historico_aptidoes = []
+    
     for geracao in range(num_geracoes):
         pais_selecionados = selecionar_pais(populacao, matriz_relacionamentos)
         filhos = realizar_cruzamento(pais_selecionados, prob_cruzamento)
         realizar_mutacao(filhos, prob_mutacao, numero_nos)
         populacao = filhos
-
+        
         for alocacao in populacao:
             aptidao = calcular_aptidao(alocacao, matriz_nos, matriz_pods, matriz_relacionamentos)
             if aptidao > melhor_aptidao:
                 melhor_alocacao = alocacao
                 melhor_aptidao = aptidao
-
+                
         melhores_aptidoes.append(melhor_aptidao)
         melhores_alocacoes.append(melhor_alocacao)
-        todas_aptidoes.append(
-            [calcular_aptidao(alocacao, matriz_nos, matriz_pods, matriz_relacionamentos) for alocacao in populacao])
+        todas_aptidoes.append([calcular_aptidao(alocacao, matriz_nos, matriz_pods, matriz_relacionamentos) for alocacao in populacao])
 
     print('-' * 45)
     print(f"Alocação: {melhor_alocacao}")
     print(f"Aptidão: {melhor_aptidao}")
-
+    
     # Imprimindo a alocação dos pods nos nós
     for pod, node in enumerate(melhor_alocacao):
         print(f"O POD {pod} está alocado no Nó '{node}'")
-
+        
     # Calculando o consumo de recursos utilizados nos nós
     somatorio_alocacao = [{'memoria': 0, 'cpu': 0} for _ in range(len(matriz_nos))]
-
+    
     for pod, node in enumerate(melhor_alocacao):
         somatorio_alocacao[node]['memoria'] += matriz_pods[pod]['memoria_pod']
         somatorio_alocacao[node]['cpu'] += matriz_pods[pod]['cpu_pod']
-
+    
     # Imprimindo o consumo de recursos utilizados nos nós
     for i, somatorio in enumerate(somatorio_alocacao):
         print(f"Recursos utilizados Nó {i}: Memória = {somatorio['memoria']} CPU = {somatorio['cpu']}")
-
+    
     # Calculando o somatório do peso do relacionamento dos pods nos nós
     pesos_comunicacao = [0] * len(matriz_nos)
     for i, node in enumerate(melhor_alocacao):
@@ -393,18 +414,18 @@ def algoritmo_genetico(numero_pods, numero_nos, matriz_relacionamentos, tam_popu
                 pod2 = j
                 peso = matriz_relacionamentos[pod1][pod2]
                 pesos_comunicacao[node] += peso
-
+    
     # Imprimindo o somatório do peso do relacionamento dos pods nos nós
     for i, peso in enumerate(pesos_comunicacao):
         print(f"O somatório do peso do relacionamento dos pods do nó {i} é {peso}")
-
+        
     return melhor_alocacao, melhor_aptidao, melhores_aptidoes
 
 matriz_nos = gerar_matriz_nos(numero_nos, cpu_no, mem_no)
-matriz_pods, matriz_relacionamentos = gerar_matrizes(numero_pods)
+matriz_pods, matriz_relacionamentos = gerar_matrizes()
 print("")
 
-resultados_aptidoes = []
+resultados_aptidoes =[]
 melhor_aptidao_global = float('-inf')
 melhor_alocacao_global = None
 
@@ -416,47 +437,45 @@ for teste in range(qt_teste):
     for pod in matriz_pods:
         mem_total_pod += pod['memoria_pod']
         cpu_total_pod += pod['cpu_pod']
-
+    
     for no in matriz_nos:
         mem_total_no += no['memoria_no']
         cpu_total_no += no['cpu_no']
-
+        
     # # Exibindo a matriz dos Nos
     # print("Matriz dos Nos:")
     # for no in matriz_nos:
     #     print(f"Nó {no['id']}: Memória={no['memoria_no']} CPU={no['cpu_no']}")
-
+    
     # print(f"Quantidade total de CPU dos Nós: {cpu_total_no}")
     # print(f"Quantidade total de Memória dos Nós: {mem_total_no}")
     # print("")
-
+    
     # # Exibindo a matriz de pods
     # print("Matriz de Pods:")
     # for pod in matriz_pods:
     #     print(f"Pod {pod['id']}: Memória={pod['memoria_pod']} CPU={pod['cpu_pod']}")
-
+        
     # print(f"Quantidade total de CPU requerida pelos PODs: {cpu_total_pod}")
     # print(f"Quantidade total de Memória requerida pelos PODs: {mem_total_pod}")
     # print("")
-
+    
     # # Exibindo a matriz de relacionamentos (apenas os valores de peso)
     # print("\nMatriz de Relacionamentos:")
     # for linha in matriz_relacionamentos:
     #     print(linha)
     # print("")
-
+    
     # Verificar se a infraestrutura comporta a quantidade de PODs
-
-    if (cpu_total_no >= cpu_total_pod) and (mem_total_no >= mem_total_pod):
+    
+    if (cpu_total_no>=cpu_total_pod) and (mem_total_no>=mem_total_pod):
         print('-' * 45)
         print(f"Melhor alocação encontrada no teste: {teste}")
-
-        melhor_alocacao, melhor_aptidao, melhores_aptidoes = algoritmo_genetico(numero_pods, numero_nos,
-                                                                                matriz_relacionamentos, tam_populacao,
-                                                                                prob_mutacao, num_geracoes, teste)
-
+        
+        melhor_alocacao, melhor_aptidao, melhores_aptidoes = algoritmo_genetico(numero_pods, numero_nos, matriz_relacionamentos, tam_populacao, prob_mutacao, num_geracoes, teste)
+        
         resultados_aptidoes.append(melhores_aptidoes)
-
+        
         if melhor_aptidao > melhor_aptidao_global:
             melhor_aptidao_global = melhor_aptidao
             alocacao_global = melhor_alocacao
@@ -464,21 +483,21 @@ for teste in range(qt_teste):
         print('-' * 45)
         print("A alocação apropriada é infactível")
 
+
 # --------------- Melhor Aptidão Global --------------- #
 # Identificando o teste que resultou na melhor aptidão global
 print('-' * 45)
 print("Melhor Alocação Global")
 print(f"Melhor Aptidão Global: {melhor_aptidao_global}")
 print(f"Melhor Alocação Global: {alocacao_global}")
-# Imprimindo a alocação dos pods nos nós
+    # Imprimindo a alocação dos pods nos nós
+
 
 # --------------- Imprimindo Gráficos --------------- #
 # função para calcular a média e o desvio padrão ao longo do eixo 0, que representa as várias execuções do algoritmo.
 media_aptidoes = np.mean(resultados_aptidoes, axis=0)
-# mediana_aptidoes = median(resultados_aptidoes, axis=0)
 minimo_aptidoes = np.min(resultados_aptidoes, axis=0)
 desvio_padrao_aptidoes = np.std(resultados_aptidoes, axis=0)
-# melhor_aptidao_global = np.max(resultados_aptidoes)
 
 geracoes = range(1, num_geracoes + 1)
 
@@ -492,6 +511,7 @@ print("Mediana Global das Aptidões:", mediana_global_aptidoes)
 print("Mínimo Global das Aptidões:", minimo_global_aptidoes)
 print("Desvio Padrão Global das Aptidões:", desvio_global_aptidoes)
 print("Melhor Aptidão Global:", melhor_aptidao_global)
+print(matriz_relacionamentos)
 
 # Plota todos os testes
 for i, evolucao in enumerate(resultados_aptidoes):
@@ -499,7 +519,7 @@ for i, evolucao in enumerate(resultados_aptidoes):
 
 # plt.errorbar(geracoes, media_aptidoes, yerr=desvio_padrao_aptidoes, uplims=True, lolims=True, linewidth = 1, color='red', label='Média das aptidões')
 
-plt.plot(geracoes, media_aptidoes, linewidth=1, color='red', label='Média das aptidões')
+plt.plot(geracoes, media_aptidoes, linewidth = 1, color='red', label='Média das aptidões')
 plt.axhline(y=melhor_aptidao_global, color='green', linestyle='--', alpha=0.5, label='Melhor Aptidão Global')
 
 plt.xlabel('Geração')
