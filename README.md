@@ -13,7 +13,7 @@ O problema consiste em classificar diferentes alocações para determinar a solu
 
 ## Dependências
 
-Para rodar este repositório localmente, é necessário suprir as seguintes dependências:
+Para executar este repositório localmente, é necessário suprir as seguintes dependências:
 
 - Python 3.8+: Linguagem de programação principal utilizada no projeto.
 - Bibliotecas Python:
@@ -52,4 +52,4 @@ Desvio Padrão Global das Aptidões: 1.4051678021004357
 
 ## Documentação
 
-Para mais informações sobre o projeto e testes mais elaborados acesse adocumentação: [k8sGaScheduler](docs/documentacao.md)
+Para mais informações sobre o projeto e testes mais elaborados acesse a Documentação: [k8sGaScheduler](docs/documentacao.md)
