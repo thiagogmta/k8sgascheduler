@@ -1,13 +1,52 @@
-O problema foi representado por meio de um Algoritmo Genético, uma técnica de otimização inspirada na teoria da evolução biológica. Amplamente utilizados para resolver problemas complexos de otimização, incluindo a alocação eficiente de recursos, sendo aplicáveis à solução deste problema. A lógica de implementação foi formulada da seguinte maneira: um cromossomo [0,1,0,2] representa a alocação de quatro pods em três nós, onde o pod 0 está alocado no nó 0, o pod 1 no nó 1, o pod 2 no nó 0 e o pod 3 no nó 2.
+# Documentação
 
+> Bem vindo a pagina de documentação do artefato proposto no artigo: *K8sGAScheduler: Algoritmo para alocacaçao inteligente de recursos em cluster kubernetes*
 
-Para o ambiente, foram criadas três matrizes:
+Este repositório introduz o K8sGAScheduler, uma técnica de agendamento baseada em Algoritmo Genético desenvolvida para otimizar a alocação de pods em clusters Kubernetes. Essa abordagem leva em conta o consumo de recursos, a comunicação entre os pods e as restrições de capacidade dos nós, visando encontrar uma alocação que maximize a eficiência do cluster. Os resultados obtidos, por meio de simulação, demonstram melhorias em relação ao scheduler padrão do Kubernetes, oferecendo insights para o gerenciamento mais eficiente de recursos em clusters Kubernetes e delineando para futuras pesquisas nessa área.
 
-1. **Matriz de nós:** Representa os nós que receberão as alocações de PODs. Esta matriz possui os campos: ID, CPU e memória para cada nó.
-2. **Matriz de PODs:** Representa os PODs a serem alocados. Esta matriz também possui os campos: ID, CPU e memória para cada POD.
-3. **Matriz simétrica de relacionamentos:** Representa a taxa de envio e recebimento de informações entre os PODs. Esta representação abstrai que dado um valor na matriz, simboliza o peso da quantidade de troca de informações entre os PODs.
+O problema foi representado por meio de uma modelagem matemática e implementado com Algoritmo Genético, uma técnica de otimização inspirada na teoria da evolução biológica. A lógica de implementação foi formulada da seguinte maneira: um cromossomo [0,1,0,2] representa a alocação de quatro pods em três nós, onde o pod 0 está alocado no nó 0, o pod 1 no nó 1, o pod 2 no nó 0 e o pod 3 no nó 2. Avalia-se a qualidade de cada alocação de forma a encontrar a alocação mais eficiente.
 
-> **Nota**: O projeto em fase de andamento porém funcional para testes iniciais
+## Fluxo de funcionamento do Algoritmo
+
+1. **Inicia três matrizes:**
+  - Matriz de nós:
+    - Essa matriz representa os nós do cluster
+    - Possui os campos: id, cpu_no, mem_no
+  - Matriz de pods:
+    - Essa matriz representa os pods a serem alocados
+    - Possui os campos: id, cpu_pod, mem_pod
+  - Matriz simétrica de relacionamentos
+    - Essa matriz representa a taxa de relacionamento entre os pods
+2. **Implementa o fluxo do algoritmo genético**
+  - Inicialização da População
+    - População com 100 individuos onde cada cromossomo carrega uma possível solução
+  - Avaliação da Aptidão (Fitness)
+    - Calcula o quão boa é a alocação com base no modelo matemático
+  - Seleção dos Pais
+    - Seleciona os cromossomos pais utilizando o método da roleta
+  - Cruzamento
+    - Realiza o cruzamento entre os pais selecionados para gerar novos cromossomos (filhos)
+  - Mutação
+    - Aplica a mutação (troca aleatória de gene) para permitir a busca de novas soluções
+  - Avaliação da Aptidão dos filhos
+    - Calcula a aptidão de solução de cada filho gerado
+  - Seleção dos Sobreviventes
+    - Exclui parte da população gerada e seleciona os cromossomos sobreviventes para gerar uma nova população
+  - Repetição dos passos 4 a 8
+    - Cada iteração do algoritmo corresponde a uma nova geração criada. O algoritmo está configurado para 100 gerações.
+  - Retorna com a Melhor Solução Encontrada
+    - O algoritmo retorna a melhor alocação de PODs em Nós encontrada durante as gerações
+3. **Reexecução**
+  - O algoritmo implementa o passo 2 por 5 vezes (por padrão)
+  - A quantidade de testes pode ser alterada via linha de comando no início da execução do algoritmo.
+4. **Resultado**
+  - Ao final das execuções será retornado:
+    - A Melhor aptidão global
+    - A melhor alocação
+    - Média
+    - Mediana
+    - Mínimo e desvio padrão 
+    - Gráfico expressando a evolução das aptidões.
 
 ## Cenários de teste:
 

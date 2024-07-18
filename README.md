@@ -52,4 +52,4 @@ Desvio Padrão Global das Aptidões: 1.4051678021004357
 
 ## Documentação
 
-Para mais informações sobre o projeto e testes mais elaborados acesse: [Wiki - k8sGaScheduler](docs/documentacao.md)
+Para mais informações sobre o projeto e testes mais elaborados acesse adocumentação: [k8sGaScheduler](docs/documentacao.md)
