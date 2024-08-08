@@ -1,6 +1,6 @@
 # Documentação
 
-> Bem vindo a pagina de documentação do artefato proposto no artigo: *K8sGAScheduler: Algoritmo para alocacaçao inteligente de recursos em cluster kubernetes*
+> Bem vindo à documentação do **K8sGaScheduler**. Este repositório contém a documentação e o registro dos testes do artefato proposto no artigo: *K8sGAScheduler: Algoritmo para alocacaçao inteligente de recursos em cluster kubernetes*.
 
 O problema foi representado por meio de uma modelagem matemática e implementado com Algoritmo Genético, uma técnica de otimização inspirada na teoria da evolução biológica. A lógica de implementação foi formulada da seguinte maneira: um cromossomo [0,1,0,2] representa a alocação de quatro pods em três nós, onde o pod 0 está alocado no nó 0, o pod 1 no nó 1, o pod 2 no nó 0 e o pod 3 no nó 2. Avalia-se a qualidade de cada alocação de forma a encontrar a alocação mais eficiente.
 
@@ -18,63 +18,66 @@ O problema foi representado por meio de uma modelagem matemática e implementado
   - Matriz simétrica de relacionamentos
     - Essa matriz representa a taxa de relacionamento entre os pods
 ### 2. Implementa o fluxo do algoritmo genético
-  1. Inicialização da População
-    - População com 100 individuos onde cada cromossomo carrega uma possível solução
-  2. Avaliação da Aptidão (Fitness)
-    - Calcula o quão boa é a alocação com base no modelo matemático
-  3. Seleção dos Pais
-    - Seleciona os cromossomos pais utilizando o método da roleta
-  4. Cruzamento
-    - Realiza o cruzamento entre os pais selecionados para gerar novos cromossomos (filhos)
-  5. Mutação
-    - Aplica a mutação (troca aleatória de gene) para permitir a busca de novas soluções
-  6. Avaliação da Aptidão dos filhos
-    - Calcula a aptidão de solução de cada filho gerado
-  7. Seleção dos Sobreviventes
-    - Exclui parte da população gerada e seleciona os cromossomos sobreviventes para gerar uma nova população
-  8. Repetição dos passos 4 a 7
-    - Cada iteração do algoritmo corresponde a uma nova geração criada. O algoritmo está configurado para 100 gerações.
-  9. Retorna com a Melhor Solução Encontrada
-    - O algoritmo retorna a melhor alocação de PODs em Nós encontrada durante as gerações
+1. Inicialização da População
+  - População com 100 individuos onde cada cromossomo carrega uma possível solução
+2. Avaliação da Aptidão (Fitness)
+  - Calcula o quão boa é a alocação com base no modelo matemático
+3. Seleção dos Pais
+  - Seleciona os cromossomos pais utilizando o método da roleta
+4. Cruzamento
+  - Realiza o cruzamento entre os pais selecionados para gerar novos cromossomos (filhos)
+5. Mutação
+  - Aplica a mutação (troca aleatória de gene) para permitir a busca de novas soluções
+6. Avaliação da Aptidão dos filhos
+  - Calcula a aptidão de solução de cada filho gerado
+7. Seleção dos Sobreviventes
+  - Exclui parte da população gerada e seleciona os cromossomos sobreviventes para gerar uma nova população
+8. Repetição dos passos 4 a 7
+  - Cada iteração do algoritmo corresponde a uma nova geração criada. O algoritmo está configurado para 100 gerações.
+9. Retorna com a Melhor Solução Encontrada
+  - O algoritmo retorna a melhor alocação de PODs em Nós encontrada durante as gerações
 ### 3. Reexecução
-  - O algoritmo implementa a sub-sessão 2 por 5 vezes (por padrão)
-  - A quantidade de testes pode ser alterada via linha de comando no início da execução do algoritmo.
+- O algoritmo implementa a sub-sessão 2 por 5 vezes (por padrão)
+- A quantidade de testes pode ser alterada via linha de comando no início da execução do algoritmo.
 ### 4. Resultado
-  - Ao final das execuções será retornado:
-    - A Melhor aptidão global
-    - A melhor alocação
-    - Média
-    - Mediana
-    - Mínimo e desvio padrão 
-    - Gráfico expressando a evolução das aptidões.
+- Ao final das execuções será retornado:
+  - A Melhor aptidão global
+  - A melhor alocação
+  - Média
+  - Mediana
+  - Mínimo e desvio padrão 
+  - Gráfico expressando a evolução das aptidões.
 
     ![Resultado](../img/demo.png)
 
 ## Cenários de teste:
 
-Foram formulados 3 cenários de testes para avaliação do modelo:
+Para simular diferentes capacidades de alocação, foram projetados três cenários diferentes intitulados: Baixa demanda, Média demanda e Alta demanda, com alocação de 20, 25 e 30 pods, respectivamente.
 
-1. Baixa capacidade - 20 pods
-   - 20 pods com cpu de 50 milicores e memória de 64B.
-2. Capacidade aleatória - 25 pods
-   - 15 pods com cpu de 50 milicores e memória de 64MB.
-   - 10 pods com CPU de 100 milicores e memória de 128MB.
-3. Alta capacidade - 30 pods
-    - 20 pods com CPU de 50 milicores e memória de 64MB.
-    - 10 pods com CPU de 100 milicores e memória de 128MB.
+1. Baixa Demanda - 20 pods
+   - 20 pods com cpu de 50 milicores e memória de 64Mb.
+2. Média Demanda - 25 pods
+   - 15 pods com cpu de 50 milicores e memória de 64Mb.
+   - 10 pods com CPU de 100 milicores e memória de 128Mb.
+3. Alta Demanda - 30 pods
+    - 20 pods com CPU de 50 milicores e memória de 64Mb.
+    - 10 pods com CPU de 100 milicores e memória de 128Mb.
+
+Para avaliar os resultados do K8sGASchedule foram executadas dois conjuntos de avaliação sendo: no primeiro ciclo de avaliação foi definido uma taxa de relacionamento de 0% para matriz de relacionamentos, representando a ausência de comunicação entre os pods para tomada de decisão de alocação. Esse conjunto de testes está armazenado no diretório docs/ga/taxa_rel_0.
+
+No segundo ciclo, essa taxa foi aumentada para 10%, refletindo o preenchimento de 10% dos valores na matriz simétrica, representando o custo de comunicação entre os pods para a alocação. Esse conjunto de testes está armazenado no diretório docs/ga/taxa_rel_10.
+
+Cada um dos algoritmos de cada um dos ciclos de avaliação foram executados cinquenta vezes. Para cada ciclo de avaliação foi registrado: a melhor aptidão, a média global das aptidões, a mediana e o desvio padrão.
 
 ## Arquivos do repositório:
 
-Na raiz do repositório estão os três algoritmos que retornam as melhores alocações em três cenários diferentes:
+Na raiz do repositório encontra-se um teste demo para para testes básicos de funcionalidade.
 
-- k8sgascheduler_a.py
-  - Arquivo referente ao texte de baixa capacidade
-- k8sgascheduler_b.py
-  - Arquivo referente ao texte de capacidade aleatória
-- k8sgascheduler_c.py
-  - Arquivo referente ao texte de alta capacidade
-
-No diretório \calcular encontram-se três arquivos que calculam a apitidão de uma alocação específica inserida pelo usuário.
+- Diretório docs/ga
+  - Encontram-se os testes de Baixa demanda, média demanda e alta demanda.
+  - 
+- Diretório /docs/calcular 
+  - encontram-se arquivos que calculam a apitidão de uma alocação específica inserida pelo usuário.
 
 - Diretório \calcular
   - aptidao_a.py

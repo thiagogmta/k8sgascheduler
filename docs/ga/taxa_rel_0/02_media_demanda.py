@@ -1,52 +1,25 @@
 # -*- coding: utf-8 -*-
 """
 Created on Fri Jun  9 10:57:55 2023
-
 @author: Thiago Guimarães
-
-Fluxo do algoritmo genético:
-    
-    1 - Definição da representação dos cromossomos
-        - Cada cromossomo representa uma solução candidata que é a alocação de PODs em Nós (Gene: 1 sim; 0 não)
-    2 - Iníciar a população
-        - Cada cromossomo é uma "pessoa" que carrega uma possível solução.
-    3 - Avaliação da aptidão (fitness)
-        - A aptidão calcula o quão boa é aquela alocação com base no peso do relacionamento entre os PODs
-    4 - Seleção dos pais
-        - Seleciona os cromossomos pais (roleta)
-    5 - Cruzamento (crossover)
-        - Realizar o cruzamento entre os pais selecionados para gerar novos cromossomos (filhos)
-    6 - Mutação
-        - Aplica a mutação (troca aleatória de gene). Permitindo que o algoritmo continue buscando novas soluções.
-    7 - Avaliação da aptidão dos filhos
-        - Calcula a aptidão de solução de cada filho gerado
-    8 - Seleção dos sobreviventes
-        - Exclui parte da população gerada e seleciona os cromossomos sobreviventes para gerar uma nova população
-    9 - Repete os passos de 4 a 8
-        - Cada vez que o algoritmo se repetir será uma nova geração criada
-    10 - Retorna com a melhor solução encontrada
 """
-
-# Dados para receber:
-#   Quantas vezes deseja executar o GA?
-#   Salvar em arquivo o resultado dos testes
-
 
 import random
 import matplotlib.pyplot as plt
 import numpy as np
 
-# --------------- Variáveis para o GA --------------- #"
+# ------------------------------ Variáveis para o GA ------------------------------ #
 tam_populacao = 100          # Tamaho da população do GA
 num_geracoes = 100            # Numero de gerações do GA
 prob_cruzamento = 0.8       # Probabilidade de cruzamento (80%)
 prob_mutacao = 0.2          # Probabilidade de mutação (20%)
 qt_teste = 10                # Qt de vezes que o teste será executado por padrão
+
+# ------------------------------ Variáveis do cluster ------------------------------ #
 numero_nos = 3              # Qt padrão de nós
 cpu_no = 2000               # Qt de CPU de cada Nó
 mem_no = 2048               # Qt de Memória de cada Nó
 numero_pods = 25            # Qt de PODs a serem alocados
-#taxa_rel = 10               # Porcentagem de preenchimento da matriz de relacionamentos
 
 print("# --------------- Entre com os Dados Para o GA --------------- #")
 qt = input(f"Entre com a quantidade de vezes que o teste será executado (tecle enter para padrão {qt_teste}): ")

@@ -1,52 +1,25 @@
 # -*- coding: utf-8 -*-
 """
 Created on Fri Jun  9 10:57:55 2023
-
 @author: Thiago Guimarães
-
-Fluxo do algoritmo genético:
-    
-    1 - Definição da representação dos cromossomos
-        - Cada cromossomo representa uma solução candidata que é a alocação de PODs em Nós (Gene: 1 sim; 0 não)
-    2 - Iníciar a população
-        - Cada cromossomo é uma "pessoa" que carrega uma possível solução.
-    3 - Avaliação da aptidão (fitness)
-        - A aptidão calcula o quão boa é aquela alocação com base no peso do relacionamento entre os PODs
-    4 - Seleção dos pais
-        - Seleciona os cromossomos pais (roleta)
-    5 - Cruzamento (crossover)
-        - Realizar o cruzamento entre os pais selecionados para gerar novos cromossomos (filhos)
-    6 - Mutação
-        - Aplica a mutação (troca aleatória de gene). Permitindo que o algoritmo continue buscando novas soluções.
-    7 - Avaliação da aptidão dos filhos
-        - Calcula a aptidão de solução de cada filho gerado
-    8 - Seleção dos sobreviventes
-        - Exclui parte da população gerada e seleciona os cromossomos sobreviventes para gerar uma nova população
-    9 - Repete os passos de 4 a 8
-        - Cada vez que o algoritmo se repetir será uma nova geração criada
-    10 - Retorna com a melhor solução encontrada
 """
-
-# Dados para receber:
-#   Quantas vezes deseja executar o GA?
-#   Salvar em arquivo o resultado dos testes
-
 
 import random
 import matplotlib.pyplot as plt
 import numpy as np
 
-# --------------- Variáveis para o GA --------------- #"
+# ------------------------------ Variáveis para o GA ------------------------------ #
 tam_populacao = 100          # Tamaho da população do GA
 num_geracoes = 100            # Numero de gerações do GA
 prob_cruzamento = 0.8       # Probabilidade de cruzamento (80%)
 prob_mutacao = 0.2          # Probabilidade de mutação (20%)
 qt_teste = 10                # Qt de vezes que o teste será executado por padrão
+
+# ------------------------------ Variáveis do cluster ------------------------------ #
 numero_nos = 3              # Qt padrão de nós
 cpu_no = 2000               # Qt de CPU de cada Nó
 mem_no = 2048               # Qt de Memória de cada Nó
-numero_pods = 25            # Qt de PODs a serem alocados
-#taxa_rel = 10               # Porcentagem de preenchimento da matriz de relacionamentos
+numero_pods = 20            # Qt de PODs a serem alocados
 
 print("# --------------- Entre com os Dados Para o GA --------------- #")
 qt = input(f"Entre com a quantidade de vezes que o teste será executado (tecle enter para padrão {qt_teste}): ")
@@ -78,45 +51,40 @@ def gerar_matrizes(numero_pods):
         {'id': 12, 'cpu_pod': 50, 'memoria_pod': 64},
         {'id': 13, 'cpu_pod': 50, 'memoria_pod': 64},
         {'id': 14, 'cpu_pod': 50, 'memoria_pod': 64},
-        {'id': 15, 'cpu_pod': 100, 'memoria_pod': 128},
-        {'id': 16, 'cpu_pod': 100, 'memoria_pod': 128},
-        {'id': 17, 'cpu_pod': 100, 'memoria_pod': 128},
-        {'id': 18, 'cpu_pod': 100, 'memoria_pod': 128},
-        {'id': 19, 'cpu_pod': 100, 'memoria_pod': 128},
-        {'id': 20, 'cpu_pod': 100, 'memoria_pod': 128},
-        {'id': 21, 'cpu_pod': 100, 'memoria_pod': 128},
-        {'id': 22, 'cpu_pod': 100, 'memoria_pod': 128},
-        {'id': 23, 'cpu_pod': 100, 'memoria_pod': 128},
-        {'id': 24, 'cpu_pod': 100, 'memoria_pod': 128}
+        {'id': 15, 'cpu_pod': 50, 'memoria_pod': 64},
+        {'id': 16, 'cpu_pod': 50, 'memoria_pod': 64},
+        {'id': 17, 'cpu_pod': 50, 'memoria_pod': 64},
+        {'id': 18, 'cpu_pod': 50, 'memoria_pod': 64},
+        {'id': 19, 'cpu_pod': 50, 'memoria_pod': 64}
     ]
 
     # Criar matriz_relacionamentos
     matriz_relacionamentos = [
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.22, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
-        [0, 0, 0, 0.83, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.87, 0, 0, ],
-        [0, 0, 0.83, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.55, 0, 0, 0.53, 0, 0, 0, 0, 0.21, 0, 0, 0, ],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.82, 0, 0, 0, 0, 0, 0, 0.35, 0, 0, 0, 0.89, 0, 0, ],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.45, 0, 0, 0, 0, 0, 0, ],
-        [0, 0, 0, 0, 0, 0, 0.44, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.06, 0, 0, ],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.76, 0, 0, 0, 0, 0, 0.59, ],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.57, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.97, 0.87, 0, 0, 0, 0, 0, 0.35, 0, 0, 0, 0, 0, 0, 0, ],
-        [0, 0, 0, 0, 0.82, 0, 0, 0, 0, 0, 0.87, 0, 0, 0.36, 0, 0, 0, 0.99, 0.99, 0, 0, 0, 0, 0, 0.09, ],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0.57, 0, 0, 0.47, 0, 0, 0, 0, 0, 0, 0, 0, 0.22, 0, 0, 0, ],
-        [0, 0, 0, 0.55, 0, 0, 0, 0, 0, 0, 0, 0.36, 0, 0, 0, 0.44, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
-        [0.22, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.44, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
-        [0, 0, 0, 0.53, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.94, 0, 0, 0, 0, 0, 0, 0, ],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.35, 0.99, 0, 0, 0, 0, 0.94, 0, 0, 0, 0, 0, 0, 0, 0.14, ],
-        [0, 0, 0, 0, 0.35, 0.45, 0, 0, 0.76, 0, 0, 0.99, 0, 0, 0, 0, 0, 0, 0, 0.66, 0, 0, 0, 0, 0, ],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.66, 0, 0, 0, 0, 0.04, 0, ],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
-        [0, 0, 0, 0.21, 0, 0, 0, 0, 0, 0, 0, 0, 0.22, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.3, ],
-        [0, 0, 0.87, 0, 0.89, 0, 0, 0.06, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.04, 0, 0, 0, 0, 0, ],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0.59, 0, 0, 0.09, 0, 0, 0, 0, 0, 0.14, 0, 0, 0, 0.3, 0, 0, 0]
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     ]
     # matriz_relacionamentos = [
     #     [round(random.uniform(0, 1), 2) if random.uniform(0, 100) < taxa_rel else 0 for _ in range(numero_pods)]

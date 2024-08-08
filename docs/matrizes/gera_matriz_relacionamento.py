@@ -1,6 +1,11 @@
 import random
-numero_pods = 30            # Qt de PODs a serem alocados
-taxa_rel = 0               # Porcentagem de preenchimento da matriz de relacionamentos
+
+print("# ----------------- Script para gerar matriz simétrica de relacionamentos -----------------#")
+numero_pods = int(input('Entre com a quantidade de pods do cluster: '))
+taxa_rel = int(input('Entre com a porcentagem de relacionamento entre os pods (taxa de relacionamento): '))
+
+print(numero_pods)
+
 def gerar_matriz(numero_pods, taxa_rel):
 
     # Criar matriz_relacionamentos

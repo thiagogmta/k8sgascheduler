@@ -4,18 +4,18 @@ Created on Fri Jun  9 10:57:55 2023
 @author: Thiago Guimarães
 """
 
-
-
 import random
 import matplotlib.pyplot as plt
 import numpy as np
 
-# --------------- Variáveis para o GA --------------- #"
+# ------------------------------ Variáveis para o GA ------------------------------ #
 tam_populacao = 100         # Tamaho da população do GA
 num_geracoes = 100          # Numero de gerações do GA
 prob_cruzamento = 0.8       # Probabilidade de cruzamento (80%)
 prob_mutacao = 0.2          # Probabilidade de mutação (20%)
 qt_teste = 5                # Qt de vezes que o teste será executado por padrão
+
+# ------------------------------ Variáveis do cluster ------------------------------ #
 numero_nos = 3              # Qt padrão de nós
 cpu_no = 2000               # Qt de CPU de cada Nó
 mem_no = 2048               # Qt de Memória de cada Nó
