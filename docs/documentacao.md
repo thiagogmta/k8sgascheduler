@@ -146,7 +146,7 @@ Para alterar a quantidade de Nós ou de Pods, é necessário:
 
 ### 3. Matriz de relacionamentos
 
-Através do arquivo "docs/ga/matrizes/gera_matriz_relacionamentos.py", é possível criar uma nova matriz. Se desejar realizar testes alterando a quantidade de pods ou ajustando a taxa de relacionamentos. Para isso basta:
+Através do arquivo "docs/ga/gera_matriz_relacionamentos.py", é possível criar uma nova matriz. Se desejar realizar testes alterando a quantidade de pods ou ajustando a taxa de relacionamentos. Para isso basta:
 1. Abrir o arquivo e alterar as variaveis:
    - numero_pods = 25
    - taxa_rel = 30 (nesse exemplo será gerada uma matriz simétrica com 30% de preenchimento com valores entre 0 e 1)
@@ -154,11 +154,14 @@ Através do arquivo "docs/ga/matrizes/gera_matriz_relacionamentos.py", é possí
 3. Copie a matriz gerada e insira como conteúdo no algoritmo
 
 ### Calculando a Aptidão de uma alocação:
-Para inserir uma alocação e receber a aptidão da alocação desejada, basta acessar o arquivo calcular\aptidao_a.py e alterar o valor da variável "alocacao", inserindo a alocação desejada. O algoritmo irá retorar a aptidão da alocação.
 
-```bash
-python calcular\aptidao_a.py
-```
+Você pode, com base em um vetor de alocação, calcular qual a aptidão daquela distribuição de Pods. Para inserir uma alocação e receber a aptidão da alocação inserida, basta acessar o arquivo "docs/ga/calcular_aptidao.py". Nesse arquivo você deverá configurar:
+1. Os parâmetros desejados do G.A.
+2. Preencher as variáveis do cluster
+3. Inserir o vetor de alocação na variável "alocacao"
+4. Configurar os valores das matrizes: matriz_nos, matriz_pods e matriz_relacionamentos conforme os parâmetros do ambiente desejado.
+
+Com base nas informações o altoritmo irá calcular a aptidão da alocação. Exemplo:
 
 ```python
 Alocação informada: [0, 1, 1, 1, 0, 2, 0, 2, 2, 1, 1, 2, 0, 0, 1, 0, 0, 2, 2, 2]
